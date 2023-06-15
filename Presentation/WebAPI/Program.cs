@@ -1,6 +1,7 @@
-var builder = WebApplication.CreateBuilder(args);
-var app = builder.Build();
+using WebAPI.Extensions;
 
-app.MapGet("/", () => "Hello World!");
-
-app.Run();
+WebApplication.CreateBuilder(args)
+    .RegisterServices()
+    .Build()
+    .SetupMiddleware()
+    .Run();
