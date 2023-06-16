@@ -1,7 +1,9 @@
 using Application.Repositories;
+using Application.Services;
 using Domain.Logging;
 using Persistence.Logging;
 using Persistence.Repositories;
+using Persistence.Services;
 
 namespace WebAPI.Extensions;
 
@@ -34,4 +36,7 @@ public static class ServiceExtensions
     
     public static void ConfigureRepositoryManager(this IServiceCollection services) => 
         services.AddScoped<IRepositoryManager, RepositoryManager>();
+
+    public static void ConfigureServiceManager(this IServiceCollection services) =>
+       services.AddScoped<IServiceManager, ServiceManager>();
 }
