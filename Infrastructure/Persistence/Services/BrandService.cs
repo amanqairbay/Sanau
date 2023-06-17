@@ -1,5 +1,7 @@
+using Application.Common.DTOs;
 using Application.Repositories;
 using Application.Services;
+using AutoMapper;
 using Domain.Logging;
 
 namespace Persistence.Services;
@@ -9,12 +11,35 @@ namespace Persistence.Services;
 /// </summary>
 internal sealed class BrandService : IBrandService
 {
-    private readonly IRepositoryManager _repositoryManager;
+    private readonly IRepositoryManager _repository;
     private readonly ILoggerManager _logger;
+    private readonly IMapper _mapper;
 
-    public BrandService(IRepositoryManager repositoryManager, ILoggerManager logger)
+#region constructor
+    public BrandService(
+        IRepositoryManager repository, 
+        ILoggerManager logger,
+        IMapper mapper)
     {
-        _repositoryManager = repositoryManager;
+        _repository = repository;
         _logger = logger;
+        _mapper = mapper;
+    }
+
+#endregion constructor
+
+    public IEnumerable<BrandDto> GetAllBrands(bool trackChanges)
+    {
+        try
+        {
+            var brands = _repository.BrandRepository.GetAllBrands(trackChanges);
+            var brandsDto = _mapper.Map<IEnumerable<BrandDto>>(brands);
+            return brandsDto;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Something went wrong in the {nameof(GetAllBrands)} service method {ex}");
+            throw;
+        }
     }
 }

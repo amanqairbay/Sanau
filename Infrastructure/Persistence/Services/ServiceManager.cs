@@ -1,5 +1,6 @@
 using Application.Repositories;
 using Application.Services;
+using AutoMapper;
 using Domain.Logging;
 
 namespace Persistence.Services;
@@ -34,11 +35,14 @@ public sealed class ServiceManager : IServiceManager
 #endregion properties
 
 #region constructor
-    public ServiceManager(IRepositoryManager repository, ILoggerManager logger)
+    public ServiceManager(
+        IRepositoryManager repository, 
+        ILoggerManager logger,
+        IMapper mapper)
     {
-        _brandService = new Lazy<IBrandService>(() => new BrandService(repository, logger));
-        _categoryService = new Lazy<ICategoryService>(() => new CategoryService(repository, logger));
-        _productService = new Lazy<IProductService>(() => new ProductService(repository, logger));
+        _brandService = new Lazy<IBrandService>(() => new BrandService(repository, logger, mapper));
+        _categoryService = new Lazy<ICategoryService>(() => new CategoryService(repository, logger, mapper));
+        _productService = new Lazy<IProductService>(() => new ProductService(repository, logger, mapper));
     }
 
 #endregion constructor

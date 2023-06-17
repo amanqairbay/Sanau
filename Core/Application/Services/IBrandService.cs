@@ -1,3 +1,5 @@
+using Application.Common.DTOs;
+
 namespace Application.Services;
 
 /// <summary>
@@ -5,5 +7,5 @@ namespace Application.Services;
 /// </summary>
 public interface IBrandService
 {
-
+    IEnumerable<BrandDto> GetAllBrands(bool trackChanges);
 }
