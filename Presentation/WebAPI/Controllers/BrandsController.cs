@@ -17,14 +17,8 @@ public class BrandsController : ControllerBase
     [HttpGet]
     public IActionResult GetBrands()
     {
-        try
-        {
-            var brands = _service.BrandService.GetAllBrands(trackChanges: false);
-            return Ok(brands);
-        }
-        catch
-        {
-            return StatusCode(500, "Iternal server error.");
-        }
+        throw new Exception("Exception");
+        var brands = _service.BrandService.GetAllBrands(trackChanges: false);
+        return Ok(brands);
     }
 }

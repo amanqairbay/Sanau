@@ -1,3 +1,4 @@
+using Domain.Logging;
 using Microsoft.AspNetCore.HttpOverrides;
 
 namespace WebAPI.Extensions;
@@ -16,10 +17,13 @@ public static class RegisterStartupMiddlewaresExtensions
     /// </returns>
     public static WebApplication SetupMiddleware(this WebApplication app)
     {
+        var logger = app.Services.GetRequiredService<ILoggerManager>();
+        app.ConfigureExceptionHandler(logger);
+
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
-            
+            app.UseHsts();
         }
 
         app.UseHttpsRedirection();

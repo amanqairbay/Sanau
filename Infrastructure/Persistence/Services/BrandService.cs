@@ -30,16 +30,8 @@ internal sealed class BrandService : IBrandService
 
     public IEnumerable<BrandDto> GetAllBrands(bool trackChanges)
     {
-        try
-        {
-            var brands = _repository.BrandRepository.GetAllBrands(trackChanges);
-            var brandsDto = _mapper.Map<IEnumerable<BrandDto>>(brands);
-            return brandsDto;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Something went wrong in the {nameof(GetAllBrands)} service method {ex}");
-            throw;
-        }
+        var brands = _repository.BrandRepository.GetAllBrands(trackChanges);
+        var brandsDto = _mapper.Map<IEnumerable<BrandDto>>(brands);
+        return brandsDto;
     }
 }
