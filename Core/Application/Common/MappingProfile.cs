@@ -12,5 +12,7 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         CreateMap<Brand, BrandDto>();
+        CreateMap<Category, CategoryDto>();
+        CreateMap<Product, ProductDto>();
     }
 }

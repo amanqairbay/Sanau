@@ -37,7 +37,8 @@ public abstract class BaseRepository<T> : IBaseRepository<T> where T : BaseEntit
     /// </summary>
     /// <typeparam name="T">Entity type.</typeparam>
     /// <param name="expression">A function to test each element for a condition.</param>
-    /// <param name="trackChanges">Used to improve the performance of read-only queries. When it is set to false, 
+    /// <param name="trackChanges">
+    /// Used to improve the performance of read-only queries. When it is set to false, 
     /// the AsNoTracking method is connected to the request to inform EF Core 
     /// that it does not need to track changes for the required objects. 
     /// This greatly improves the speed of query execution.
