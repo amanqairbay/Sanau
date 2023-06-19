@@ -17,7 +17,7 @@ public class BrandController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAllBrands()
     {
-        throw new Exception("Exception");
+        //throw new Exception("Exception");
         var brands = await _service.BrandService.GetAllBrandsAsync(trackChanges: false);
         return Ok(brands);
     }

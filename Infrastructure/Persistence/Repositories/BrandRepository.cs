@@ -38,7 +38,7 @@ public class BrandRepository : BaseRepository<Brand>, IBrandRepository
     /// </returns>
     public async Task<IEnumerable<Brand>> GetAllBrandsAsync(bool trackChanges) =>
         await FindAll(trackChanges)
-            .OrderBy(c => c.Name)
+            .OrderBy(b => b.Name)
             .ToListAsync();
     
     /// <summary>

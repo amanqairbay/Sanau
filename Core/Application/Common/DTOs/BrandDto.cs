@@ -3,7 +3,20 @@ namespace Application.Common.DTOs;
 /// <summary>
 /// Represents a brand data transfer object.
 /// </summary>
-/// <param name="Id">Brand identifier.</param>
-/// <param name="Name">Brand name.</param>
-/// <param name="Description">Brand description.</param>
-public record BrandDto(Guid Id, string Name, string Description);
+public record BrandDto
+{
+    /// <summary>
+    /// Gets or initializes a brand identifier.
+    /// </summary>
+    public Guid Id { get; init; }
+
+    /// <summary>
+    /// Gets or initializes a brand name.
+    /// </summary>
+    public string? Name { get; init; }
+
+    /// <summary>
+    /// Gets or initializes a brand description.
+    /// </summary>
+    public string? Description { get; init; }
+}

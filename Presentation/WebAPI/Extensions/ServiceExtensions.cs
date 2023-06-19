@@ -47,4 +47,11 @@ public static class ServiceExtensions
 
     public static void AddConfigureAutoMapper(this IServiceCollection services) => 
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+    public static void AddConfigureControllers(this IServiceCollection services) => 
+        services.AddControllers(config => 
+        {
+            config.RespectBrowserAcceptHeader = true;
+            config.ReturnHttpNotAcceptable = true;
+        }).AddXmlDataContractSerializerFormatters();
 }
