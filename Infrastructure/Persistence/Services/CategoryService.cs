@@ -3,6 +3,7 @@ using Application.Common.Exceptions;
 using Application.Repositories;
 using Application.Services;
 using AutoMapper;
+using Domain.Entities;
 using Domain.Logging;
 
 namespace Persistence.Services;
@@ -55,6 +56,26 @@ internal sealed class CategoryService : ICategoryService
             throw new CategoryNotFoundException(categoryId);
 
         var categoryDto = _mapper.Map<CategoryDto>(category);
+        return categoryDto;
+    }
+
+    /// <summary>
+    /// Creates a category.
+    /// </summary>
+    /// <param name="categoryForCreationDto">Category data transfer object for creation.</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation.
+    /// The task result contains the category.
+    /// </returns>
+    public async Task<CategoryDto> CreateCategoryAsync(CategoryForCreationDto categoryForCreationDto)
+    {
+        var category = _mapper.Map<Category>(categoryForCreationDto);
+
+        _repository.CategoryRepository.CreateCategory(category);
+        await _repository.SaveAsync();
+
+        var categoryDto = _mapper.Map<CategoryDto>(category);
+
         return categoryDto;
     }
 }

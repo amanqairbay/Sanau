@@ -62,4 +62,11 @@ public interface IProductRepository
     /// The task result contains the products.
     /// </returns>
     Task<IEnumerable<Product>> GetProductsForCategoryAsync(Guid categoryId, bool trackChanges);
+
+    /// <summary>
+    /// Creates a product for brand.
+    /// </summary>
+    /// <param name="brandId">Brand identifier.</param>
+    /// <param name="product">Product entity.</param>
+    void CreateProductForBrand(Guid brandId, Product product);
 }

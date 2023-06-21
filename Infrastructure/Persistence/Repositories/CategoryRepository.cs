@@ -63,4 +63,10 @@ public class CategoryRepository : BaseRepository<Category>, ICategoryRepository
     public async Task<Category?> GetCategoryByIdAsync(Guid categoryId, bool trackChanges) =>
         await FindByCondition(b => b.Id.Equals(categoryId), trackChanges)
             .SingleOrDefaultAsync();
+
+    /// <summary>
+    /// Creates a category.
+    /// </summary>
+    /// <param name="category">Category entity.</param>
+    public void CreateCategory(Category category) => Create(category);
 }

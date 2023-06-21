@@ -3,6 +3,7 @@ using Application.Common.Exceptions;
 using Application.Repositories;
 using Application.Services;
 using AutoMapper;
+using Domain.Entities;
 using Domain.Logging;
 
 namespace Persistence.Services;
@@ -132,5 +133,30 @@ internal sealed class ProductService : IProductService
         var productsDto = _mapper.Map<IEnumerable<ProductDto>>(products);
 
         return productsDto;
+    }
+
+    /// <summary>
+    /// Creates a product for brand.
+    /// </summary>
+    /// <param name="brandId">Brand identifier.</param>
+    /// <param name="trackChanges">Used to improve the performance of read-only queries.</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation.
+    /// The task result contains a product.
+    /// </returns>
+    public async Task<ProductDto> CreateProductForCompany(Guid brandId, ProductForCreationDto productForCreationDto, bool trackChanges)
+    {
+        var brand = await _repository.BrandRepository.GetBrandByIdAsync(brandId, trackChanges);
+        if (brand is null)
+            throw new BrandNotFoundException(brandId);
+
+        var product = _mapper.Map<Product>(productForCreationDto);
+
+        _repository.ProductRepository.CreateProductForBrand(brandId, product);
+        await _repository.SaveAsync();
+
+        var productDto = _mapper.Map<ProductDto>(product);
+
+        return productDto;
     }
 }

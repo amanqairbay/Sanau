@@ -44,4 +44,21 @@ public interface IBrandRepository
     /// The task result contains the brand.
     /// </returns>
     Task<Brand?> GetBrandByIdAsync(Guid brandId, bool trackChanges);
+
+    /// <summary>
+    /// Gets the brands by identifiers.
+    /// </summary>
+    /// <param name="brandIds">Brand identifiers.</param>
+    /// <param name="trackChanges">Used to improve the performance of read-only queries.</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation.
+    /// The task result contains the brands.
+    /// </returns>
+    Task<IEnumerable<Brand>> GetBrandsByIdsAsync(IEnumerable<Guid> brandIds, bool trackChanges);
+
+    /// <summary>
+    /// Creates a brand.
+    /// </summary>
+    /// <param name="brand">Brand entity.</param>
+    void CreateBrand(Brand brand);
 }

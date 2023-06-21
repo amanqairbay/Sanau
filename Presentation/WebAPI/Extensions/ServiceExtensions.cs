@@ -2,6 +2,7 @@ using System.Reflection;
 using Application.Repositories;
 using Application.Services;
 using Domain.Logging;
+using Microsoft.AspNetCore.Mvc;
 using Persistence.Context;
 using Persistence.Logging;
 using Persistence.Repositories;
@@ -47,6 +48,12 @@ public static class ServiceExtensions
 
     public static void AddConfigureAutoMapper(this IServiceCollection services) => 
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+    public static void AddConfigureApiBehaviorOprions(this IServiceCollection services) => 
+        services.Configure<ApiBehaviorOptions>(options => 
+        {
+            options.SuppressModelStateInvalidFilter = true;
+        });
 
     public static void AddConfigureControllers(this IServiceCollection services) => 
         services.AddControllers(config => 

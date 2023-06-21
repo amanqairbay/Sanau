@@ -61,6 +61,16 @@ public interface IProductService
     /// A task that represents the asynchronous operation.
     /// The task result contains the products.
     /// </returns>
-
     Task<IEnumerable<ProductDto>> GetProductsForCategoryAsync(Guid categoryId, bool trackChanges);
+
+    /// <summary>
+    /// Creates a product for brand.
+    /// </summary>
+    /// <param name="brandId">Brand identifier.</param>
+    /// <param name="trackChanges">Used to improve the performance of read-only queries.</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation.
+    /// The task result contains a product.
+    /// </returns>
+    Task<ProductDto> CreateProductForCompany(Guid brandId, ProductForCreationDto productForCreationDto, bool trackChanges);
 }

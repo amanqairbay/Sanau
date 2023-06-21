@@ -81,4 +81,15 @@ public class ProductRepository : BaseRepository<Product>, IProductRepository
     public async Task<IEnumerable<Product>> GetProductsForCategoryAsync(Guid brandId, bool trackChanges) => 
         await FindByCondition(p => p.CategoryId.Equals(brandId), trackChanges)
               .OrderBy(p => p.Name).ToListAsync();
+
+    /// <summary>
+    /// Creates a product for brand.
+    /// </summary>
+    /// <param name="brandId">Brand identifier.</param>
+    /// <param name="product">Product entity.</param>
+    public void CreateProductForBrand(Guid brandId, Product product)
+    {
+        product.BrandId = brandId;
+        Create(product);
+    }
 }

@@ -27,4 +27,14 @@ public interface ICategoryService
     /// The task result contains the category.
     /// </returns>
     Task<CategoryDto?> GetCategoryByIdAsync(Guid categoryId, bool trackChanges);
+
+    /// <summary>
+    /// Creates a category.
+    /// </summary>
+    /// <param name="categoryForCreationDto">Category data transfer object for creation.</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation.
+    /// The task result contains the category.
+    /// </returns>
+    Task<CategoryDto> CreateCategoryAsync(CategoryForCreationDto categoryForCreationDto);
 }

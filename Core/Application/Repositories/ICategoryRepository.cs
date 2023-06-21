@@ -43,4 +43,10 @@ public interface ICategoryRepository
     /// The task result contains the category.
     /// </returns>
     Task<Category?> GetCategoryByIdAsync(Guid categoryId, bool trackChanges);
+
+    /// <summary>
+    /// Creates a category.
+    /// </summary>
+    /// <param name="category">Category entity.</param>
+    void CreateCategory(Category category);
 }

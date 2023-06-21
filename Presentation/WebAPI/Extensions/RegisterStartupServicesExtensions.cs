@@ -23,6 +23,7 @@ public static class RegisterStartupServicesExtensions
         builder.Services.AddConfigureServiceManager();
         builder.Services.AddConfigureSqlContext(configuration);
         builder.Services.AddConfigureAutoMapper();
+        builder.Services.AddConfigureApiBehaviorOprions();
 
         builder.Services.AddConfigureControllers();
         builder.Services.AddEndpointsApiExplorer();

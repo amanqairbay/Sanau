@@ -1,3 +1,4 @@
+using Application.Common.DTOs;
 using Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,11 +23,37 @@ public class CategoryController : ControllerBase
         return Ok(categories);
     }
 
-    [HttpGet("{id:guid}")]
+    [HttpGet("{id:guid}", Name = "CategoryById")]
     public async Task<IActionResult> GetCategory(Guid id)
     {
         var category = await _service.CategoryService.GetCategoryByIdAsync(id, trackChanges: false);
 
         return Ok(category);
+    }
+
+    [HttpGet("{id:guid}/products")]
+    public async Task<IActionResult> GetCategoryProducts(Guid id)
+    {
+        var products = await _service.ProductService.GetProductsForCategoryAsync(categoryId: id, trackChanges: false);
+        return Ok(products);
+    }
+
+    [HttpGet("{id:guid}/products/{productId:guid}")]
+    public async Task<IActionResult> GetSingleProductForCategory(Guid id, Guid productId)
+    {
+        var product = await _service.ProductService
+            .GetSingleProductForCategoryAsync(categoryId: id, productId, trackChanges: false);
+        return Ok(product);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateCategory([FromBody] CategoryForCreationDto categoryForCreationDto)
+    {
+        if (categoryForCreationDto is null)
+            return BadRequest("CategoryForCreationDto object is null");
+
+        var createdCategory = await _service.CategoryService.CreateCategoryAsync(categoryForCreationDto);
+
+        return CreatedAtRoute("CategoryById", new { id = createdCategory.Id}, createdCategory);
     }
 }

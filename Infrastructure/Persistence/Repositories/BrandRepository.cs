@@ -1,3 +1,4 @@
+using Application.Common.Exceptions;
 using Application.Repositories;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -64,4 +65,23 @@ public class BrandRepository : BaseRepository<Brand>, IBrandRepository
     public async Task<Brand?> GetBrandByIdAsync(Guid brandId, bool trackChanges) =>
         await FindByCondition(b => b.Id.Equals(brandId), trackChanges)
             .SingleOrDefaultAsync();
+    
+    /// <summary>
+    /// Gets the brands by identifiers.
+    /// </summary>
+    /// <param name="brandIds">Brand identifiers.</param>
+    /// <param name="trackChanges">Used to improve the performance of read-only queries.</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation.
+    /// The task result contains the brands.
+    /// </returns>
+    public async Task<IEnumerable<Brand>> GetBrandsByIdsAsync(IEnumerable<Guid> brandIds, bool trackChanges) =>
+        await FindByCondition(b => brandIds.Contains(b.Id), trackChanges)
+            .ToListAsync();
+
+    /// <summary>
+    /// Creates a brand.
+    /// </summary>
+    /// <param name="brand">Brand entity.</param>
+    public void CreateBrand(Brand brand) => Create(brand);
 }
