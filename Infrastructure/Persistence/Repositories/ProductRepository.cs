@@ -92,4 +92,10 @@ public class ProductRepository : BaseRepository<Product>, IProductRepository
         product.BrandId = brandId;
         Create(product);
     }
+
+    /// <summary>
+    /// Deletes a product.
+    /// </summary>
+    /// <param name="product">Product entity.</param>
+    public void DeleteProduct(Product product) => Delete(product);
 }

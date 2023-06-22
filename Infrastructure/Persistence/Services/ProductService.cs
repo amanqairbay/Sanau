@@ -139,12 +139,13 @@ internal sealed class ProductService : IProductService
     /// Creates a product for brand.
     /// </summary>
     /// <param name="brandId">Brand identifier.</param>
+    /// <param name="productForCreationDto">Product data transfer object for creation.</param>
     /// <param name="trackChanges">Used to improve the performance of read-only queries.</param>
     /// <returns>
     /// A task that represents the asynchronous operation.
     /// The task result contains a product.
     /// </returns>
-    public async Task<ProductDto> CreateProductForCompany(Guid brandId, ProductForCreationDto productForCreationDto, bool trackChanges)
+    public async Task<ProductDto> CreateProductForBrandAsync(Guid brandId, ProductForCreationDto productForCreationDto, bool trackChanges)
     {
         var brand = await _repository.BrandRepository.GetBrandByIdAsync(brandId, trackChanges);
         if (brand is null)
@@ -158,5 +159,50 @@ internal sealed class ProductService : IProductService
         var productDto = _mapper.Map<ProductDto>(product);
 
         return productDto;
+    }
+
+    /// <summary>
+    /// Updates a product for brand.
+    /// </summary>
+    /// <param name="brandId">Brand identifier.</param>
+    /// <param name="productId">Product identifier.</param>
+    /// <param name="productForUpdateDto">Product data transfer object for update.</param>
+    /// <param name="brandTrackChanges">Used to improve the performance of read-only queries.</param>
+    /// <param name="productTrackChanges">Used to improve the performance of read-only queries.</param>
+    /// <returns>A task that represents the asynchronous operation.</returns>
+    public async Task UpdateProductForBrandAsync(Guid brandId, Guid productId, ProductForUpdateDto productForUpdateDto, 
+        bool brandTrackChanges, bool productTrackChanges)
+    {
+        var brand = await _repository.BrandRepository.GetBrandByIdAsync(brandId, brandTrackChanges);
+        if (brand is null)
+            throw new BrandNotFoundException(brandId);
+        
+        var product = await _repository.ProductRepository.GetSingleProductForBrandAsync(brandId, productId, productTrackChanges);
+        if (product is null)
+            throw new ProductNotFoundException(productId);
+        
+        _mapper.Map(productForUpdateDto, product);
+        await _repository.SaveAsync();
+    }
+
+    /// <summary>
+    /// Deletes a product for brand.
+    /// </summary>
+    /// <param name="brandId">Brand identifier.</param>
+    /// <param name="productId">Product identifier.</param>
+    /// <param name="trackChanges">Used to improve the performance of read-only queries.</param>
+    /// <returns>A task that represents the asynchronous operation.</returns>
+    public async Task DeleteProductForBrandAsync(Guid brandId, Guid productId, bool trackChanges)
+    {
+        var brand = await _repository.BrandRepository.GetBrandByIdAsync(brandId, trackChanges);
+        if (brand is null)
+            throw new BrandNotFoundException(brandId);
+
+        var product = await _repository.ProductRepository.GetSingleProductForBrandAsync(brandId, productId, trackChanges);
+        if (product is null)
+            throw new ProductNotFoundException(productId);
+
+        _repository.ProductRepository.DeleteProduct(product);
+        await _repository.SaveAsync();
     }
 }

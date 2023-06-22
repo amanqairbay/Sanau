@@ -69,4 +69,10 @@ public class CategoryRepository : BaseRepository<Category>, ICategoryRepository
     /// </summary>
     /// <param name="category">Category entity.</param>
     public void CreateCategory(Category category) => Create(category);
+
+    /// <summary>
+    /// Deletes a category.
+    /// </summary>
+    /// <param name="category">Category entity.</param>
+    public void DeleteCategory(Category category) => Delete(category);
 }

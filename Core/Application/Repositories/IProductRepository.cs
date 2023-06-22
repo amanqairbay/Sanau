@@ -69,4 +69,10 @@ public interface IProductRepository
     /// <param name="brandId">Brand identifier.</param>
     /// <param name="product">Product entity.</param>
     void CreateProductForBrand(Guid brandId, Product product);
+
+    /// <summary>
+    /// Deletes a product.
+    /// </summary>
+    /// <param name="product">Product entity.</param>
+    void DeleteProduct(Product product);
 }

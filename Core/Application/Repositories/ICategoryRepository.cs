@@ -49,4 +49,10 @@ public interface ICategoryRepository
     /// </summary>
     /// <param name="category">Category entity.</param>
     void CreateCategory(Category category);
+
+    /// <summary>
+    /// Deletes a category.
+    /// </summary>
+    /// <param name="category">Category entity.</param>
+    void DeleteCategory(Category category);
 }

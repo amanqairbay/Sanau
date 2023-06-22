@@ -18,5 +18,8 @@ public class MappingProfile : Profile
         CreateMap<BrandForCreationDto, Brand>();
         CreateMap<CategoryForCreationDto, Category>();
         CreateMap<ProductForCreationDto, Product>();
+
+        CreateMap<ProductForUpdateDto, Product>();
+        CreateMap<BrandForUpdateDto, Brand>();
     }
 }

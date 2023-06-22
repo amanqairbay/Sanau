@@ -20,5 +20,5 @@ public class ProductController : ControllerBase
     {
         var products = await _service.ProductService.GetProductsAsync(trackChanges: false);
         return Ok(products);
-    }  
+    }
 }

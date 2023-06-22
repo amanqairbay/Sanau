@@ -84,4 +84,10 @@ public class BrandRepository : BaseRepository<Brand>, IBrandRepository
     /// </summary>
     /// <param name="brand">Brand entity.</param>
     public void CreateBrand(Brand brand) => Create(brand);
+
+    /// <summary>
+    /// Deletes a brand.
+    /// </summary>
+    /// <param name="brand">Brand entity.</param>
+    public void DeleteBrand(Brand brand) => Delete(brand);
 }
