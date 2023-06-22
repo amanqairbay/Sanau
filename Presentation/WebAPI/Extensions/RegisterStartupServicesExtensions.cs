@@ -1,4 +1,5 @@
 using NLog;
+using WebAPI.ActionFilters;
 
 namespace WebAPI.Extensions;
 
@@ -24,7 +25,8 @@ public static class RegisterStartupServicesExtensions
         builder.Services.AddConfigureSqlContext(configuration);
         builder.Services.AddConfigureAutoMapper();
         builder.Services.AddConfigureApiBehaviorOprions();
-
+        builder.Services.AddScoped<ValidationFilterAttribute>();
+        
         builder.Services.AddConfigureControllers();
         builder.Services.AddEndpointsApiExplorer();
         

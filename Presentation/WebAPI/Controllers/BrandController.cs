@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Application.Common.DTOs;
 using Application.Services;
 using WebAPI.ModelBinders;
+using WebAPI.ActionFilters;
 
 namespace WebAPI.Controllers;
 
@@ -15,6 +16,8 @@ public class BrandController : ControllerBase
     {
         _service = service;
     }
+
+#region GET methods
 
     [HttpGet]
     public async Task<IActionResult> GetAllBrands()
@@ -57,12 +60,14 @@ public class BrandController : ControllerBase
         return Ok(product);
     }
 
+#endregion GET methods
+
+#region POST methods
+
     [HttpPost]
+    [ServiceFilter(typeof(ValidationFilterAttribute))]
     public async Task<IActionResult> CreateBrand([FromBody] BrandForCreationDto brandForCreationDto)
     {
-        if (brandForCreationDto is null)
-            return BadRequest("BrandForCreationDto object is null");
-
         var createdBrand = await _service.BrandService.CreateBrandAsync(brandForCreationDto);
 
         return CreatedAtRoute("BrandById", new { id = createdBrand.Id}, createdBrand);
@@ -71,46 +76,47 @@ public class BrandController : ControllerBase
     [HttpPost("collection")]
     public async Task<IActionResult> CreateBrandCollection([FromBody]IEnumerable<BrandForCreationDto> brandForCreationDtos)
     {
+        //TODO: Check the validate
         var result = await _service.BrandService.CreateBrandCollectionAsync(brandForCreationDtos);
 
         return CreatedAtRoute("BrandCollection", new { ids = result.BrandIds }, result.BrandDtos );
     }
 
     [HttpPost("{id:guid}/products")]
+    [ServiceFilter(typeof(ValidationFilterAttribute))]
     public async Task<IActionResult> CreateProductForBrand(Guid id, [FromBody]ProductForCreationDto productForCreationDto)
     {
-        if (productForCreationDto is null)
-            return BadRequest("ProductForCreation object is null.");
-
-        var createdProduct = await _service.ProductService
-            .CreateProductForBrandAsync(id, productForCreationDto, trackChanges: false);
+        var createdProduct = await _service.ProductService.CreateProductForBrandAsync(id, productForCreationDto, trackChanges: false);
         
         return CreatedAtRoute("GetBrandProduct", new { id, productId = createdProduct.Id }, createdProduct);
     }
 
+#endregion POST methods
+
+#region PUT methods
+
     [HttpPut("{id:guid}")]
+    [ServiceFilter(typeof(ValidationFilterAttribute))]
     public async Task<IActionResult> UpdateBrand(Guid id, [FromBody]BrandForUpdateDto brandForUpdateDto)
     {
-        if (brandForUpdateDto is null)
-            return BadRequest("BrandForUpdateDto object is null.");
-
         await _service.BrandService.UpdateBrandAsync(brandId: id, brandForUpdateDto, trackChanges: true);
 
         return NoContent();
     }
 
     [HttpPut("{id:guid}/products/{productId:guid}")]
-    public async Task<IActionResult> UpdateBrandProduct(Guid id, Guid productId, 
-        [FromBody]ProductForUpdateDto productForUpdateDto)
+    [ServiceFilter(typeof(ValidationFilterAttribute))]
+    public async Task<IActionResult> UpdateBrandProduct(Guid id, Guid productId, [FromBody]ProductForUpdateDto productForUpdateDto)
     {
-        if (productForUpdateDto is null)
-            return BadRequest("ProductForUpdate object is null.");
-        
         await _service.ProductService.UpdateProductForBrandAsync(
             brandId: id, productId, productForUpdateDto, brandTrackChanges: false, productTrackChanges: true);
 
         return NoContent();
     }
+
+#endregion PUT methods
+
+#region DELETE methods
 
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteBrand(Guid id)
@@ -127,4 +133,6 @@ public class BrandController : ControllerBase
         
         return NoContent();
     }
+
+#endregion DELETE methods
 }

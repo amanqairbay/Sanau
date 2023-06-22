@@ -1,6 +1,7 @@
 using Application.Common.DTOs;
 using Application.Services;
 using Microsoft.AspNetCore.Mvc;
+using WebAPI.ActionFilters;
 
 namespace WebAPI.Controllers;
 
@@ -14,6 +15,8 @@ public class CategoryController : ControllerBase
     {
         _service = service;
     }
+
+#region GET methods
 
     [HttpGet]
     public async Task<IActionResult> GetAllCategories()
@@ -46,14 +49,18 @@ public class CategoryController : ControllerBase
         return Ok(product);
     }
 
+#endregion GET methods
+
+#region POST methods
+
     [HttpPost]
+    [ServiceFilter(typeof(ValidationFilterAttribute))]
     public async Task<IActionResult> CreateCategory([FromBody] CategoryForCreationDto categoryForCreationDto)
     {
-        if (categoryForCreationDto is null)
-            return BadRequest("CategoryForCreationDto object is null");
-
         var createdCategory = await _service.CategoryService.CreateCategoryAsync(categoryForCreationDto);
 
         return CreatedAtRoute("CategoryById", new { id = createdCategory.Id}, createdCategory);
     }
+
+#endregion POST methods
 }
