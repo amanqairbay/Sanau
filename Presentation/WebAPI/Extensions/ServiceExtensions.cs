@@ -25,7 +25,8 @@ public static class ServiceExtensions
             options.AddPolicy("CorsPolicy", builder => 
                 builder.AllowAnyOrigin()
                 .AllowAnyMethod()
-                .AllowAnyHeader());
+                .AllowAnyHeader()
+                .WithExposedHeaders("X-Pagination"));
         });
 
     // If we want to host our application on IIS, 

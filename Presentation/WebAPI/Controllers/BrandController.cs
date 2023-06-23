@@ -3,6 +3,8 @@ using Application.Common.DTOs;
 using Application.Services;
 using WebAPI.ModelBinders;
 using WebAPI.ActionFilters;
+using Application.Common.RequestFeatures;
+using System.Text.Json;
 
 namespace WebAPI.Controllers;
 
@@ -45,10 +47,13 @@ public class BrandController : ControllerBase
     }
 
     [HttpGet("{id:guid}/products")]
-    public async Task<IActionResult> GetBrandProducts(Guid id)
+    public async Task<IActionResult> GetBrandProducts(Guid id, [FromQuery] ProductParameters productParameters)
     {
-        var products = await _service.ProductService.GetProductsForBrandAsync(brandId: id, trackChanges: false);
-        return Ok(products);
+        var pagedResult = await _service.ProductService.GetPagedProductsForBrandAsync(brandId: id, productParameters, trackChanges: false);
+
+        Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagedResult.MetaData));
+
+        return Ok(pagedResult.Products);
     }
 
     [HttpGet("{id:guid}/products/{productId:guid}", Name = "GetBrandProduct")]

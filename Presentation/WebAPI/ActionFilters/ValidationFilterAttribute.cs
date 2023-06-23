@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace WebAPI.ActionFilters;
 
+/// <summary>
+/// Represents a filter attribute for validation.
+/// </summary>
 public class ValidationFilterAttribute : IActionFilter
 {
     public ValidationFilterAttribute() { }
