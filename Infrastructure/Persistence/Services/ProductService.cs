@@ -45,6 +45,27 @@ internal sealed class ProductService : IProductService
     }
 
     /// <summary>
+    /// Gets the paged products.
+    /// </summary>
+    /// <param name="productParameters">Product parameters.</param>
+    /// <param name="trackChanges">Used to improve the performance of read-only queries.</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation.
+    /// The task result contains the paged products.
+    /// </returns>
+    public async Task<(IEnumerable<ProductDto> Products, MetaData MetaData)> GetPagedProductsAsync(ProductParameters productParameters, bool trackChanges)
+    {
+        if (!productParameters.ValidPriceRange)
+            throw new MaxPriceRangeBadRequestException();
+
+        var productsWithMetaData = await _repository.ProductRepository.GetPagedProductsAsync(productParameters, trackChanges);
+
+        var productsDtos = _mapper.Map<IEnumerable<ProductDto>>(productsWithMetaData);
+
+        return (Products: productsDtos, MetaData: productsWithMetaData.MetaData);
+    }
+
+    /// <summary>
     /// Gets the product for brand.
     /// </summary>
     /// <param name="brandId">Brand identifier.</param>
@@ -115,6 +136,9 @@ internal sealed class ProductService : IProductService
     /// </returns>
     public async Task<(IEnumerable<ProductDto> Products, MetaData MetaData)> GetPagedProductsForBrandAsync(Guid brandId, ProductParameters productParameters, bool trackChanges)
     {
+        if (!productParameters.ValidPriceRange)
+            throw new MaxPriceRangeBadRequestException();
+            
         await CheckIfBrandExistsAsync(brandId, trackChanges);
 
         var productsWithMetaData = await _repository.ProductRepository.GetPagedProductsForBrandAsync(brandId, productParameters, trackChanges);

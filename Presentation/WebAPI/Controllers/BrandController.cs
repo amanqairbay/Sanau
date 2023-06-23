@@ -47,7 +47,7 @@ public class BrandController : ControllerBase
     }
 
     [HttpGet("{id:guid}/products")]
-    public async Task<IActionResult> GetBrandProducts(Guid id, [FromQuery] ProductParameters productParameters)
+    public async Task<IActionResult> GetPagedBrandProducts(Guid id, [FromQuery] ProductParameters productParameters)
     {
         var pagedResult = await _service.ProductService.GetPagedProductsForBrandAsync(brandId: id, productParameters, trackChanges: false);
 

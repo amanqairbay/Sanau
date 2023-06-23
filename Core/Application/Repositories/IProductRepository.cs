@@ -19,6 +19,17 @@ public interface IProductRepository
     Task<IEnumerable<Product>> GetAllProductsAsync(bool trackChanges);
 
     /// <summary>
+    /// Gets the paged products.
+    /// </summary>
+    /// <param name="productParameters">Product parameters.</param>
+    /// <param name="trackChanges">Used to improve the performance of read-only queries.</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation.
+    /// The task result contains the paged products.
+    /// </returns>
+    Task<PagedList<Product>> GetPagedProductsAsync(ProductParameters productParameters, bool trackChanges);
+
+    /// <summary>
     /// Gets a product for brand.
     /// </summary>
     /// <param name="brandId">Brand identifier.</param>
