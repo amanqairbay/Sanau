@@ -1,3 +1,4 @@
+using Application.Common.RequestFeatures;
 using Application.Repositories;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -68,6 +69,29 @@ public class ProductRepository : BaseRepository<Product>, IProductRepository
     public async Task<IEnumerable<Product>> GetProductsForBrandAsync(Guid brandId, bool trackChanges) => 
         await FindByCondition(p => p.BrandId.Equals(brandId), trackChanges)
               .OrderBy(p => p.Name).ToListAsync();
+
+    /// <summary>
+    /// Gets the paged products for brand.
+    /// </summary>
+    /// <param name="brandId">Brand identifier.</param>
+    /// <param name="productParameters">Product parameters.</param>
+    /// <param name="trackChanges">Used to improve the performance of read-only queries.</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation.
+    /// The task result contains the paged products.
+    /// </returns>
+    public async Task<PagedList<Product>> GetPagedProductsForBrandAsync(Guid brandId, ProductParameters productParameters, bool trackChanges)
+    {
+        var products = await FindByCondition(p => p.BrandId.Equals(brandId), trackChanges)
+            .OrderBy(p => p.Name)
+            .Skip((productParameters.PageNumber - 1) * productParameters.PageSize)
+            .Take(productParameters.PageSize)
+            .ToListAsync();
+        
+        var count = await FindByCondition(p => p.BrandId.Equals(brandId), trackChanges).CountAsync();
+
+        return new PagedList<Product>(products, count, productParameters.PageNumber, productParameters.PageSize);
+    }
 
     /// <summary>
     /// Gets the products per category.

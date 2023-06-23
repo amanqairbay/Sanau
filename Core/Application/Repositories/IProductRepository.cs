@@ -1,3 +1,4 @@
+using Application.Common.RequestFeatures;
 using Domain.Entities;
 
 namespace Application.Repositories;
@@ -51,6 +52,18 @@ public interface IProductRepository
     /// The task result contains the products.
     /// </returns>
     Task<IEnumerable<Product>> GetProductsForBrandAsync(Guid brandId, bool trackChanges);
+
+    /// <summary>
+    /// Gets the paged products for brand.
+    /// </summary>
+    /// <param name="brandId">Brand identifier.</param>
+    /// <param name="productParameters">Product parameters.</param>
+    /// <param name="trackChanges">Used to improve the performance of read-only queries.</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation.
+    /// The task result contains the paged products.
+    /// </returns>
+    Task<PagedList<Product>> GetPagedProductsForBrandAsync(Guid brandId, ProductParameters productParameters, bool trackChanges);
 
     /// <summary>
     /// Gets the products per category.

@@ -1,5 +1,6 @@
 using Application.Common.DTOs;
 using Application.Common.Exceptions;
+using Application.Common.RequestFeatures;
 using Application.Repositories;
 using Application.Services;
 using AutoMapper;
@@ -55,15 +56,11 @@ internal sealed class ProductService : IProductService
     /// </returns>
     public async Task<ProductDto?> GetSingleProductForBrandAsync(Guid brandId, Guid productId, bool trackChanges)
     {
-        var brand = await _repository.BrandRepository.GetBrandByIdAsync(brandId, trackChanges);
-        if (brand is null)
-            throw new BrandNotFoundException(brandId);
+        await CheckIfBrandExistsAsync(brandId, trackChanges);
 
-        var product = await _repository.ProductRepository.GetSingleProductForBrandAsync(brandId, productId, trackChanges);
-        if (product is null)
-            throw new ProductNotFoundException(productId);
-
+        var product = await GetProductForBrandAndCheckIfExistsAsync(brandId, productId, trackChanges);
         var productDto = _mapper.Map<ProductDto>(product);
+        
         return productDto;
     }
 
@@ -79,15 +76,11 @@ internal sealed class ProductService : IProductService
     /// </returns>
     public async Task<ProductDto?> GetSingleProductForCategoryAsync(Guid categoryId, Guid productId, bool trackChanges)
     {
-        var category = await _repository.CategoryRepository.GetCategoryByIdAsync(categoryId, trackChanges);
-        if (category is null)
-            throw new CategoryNotFoundException(categoryId);
+        await CheckIfCategoryExistsAsync(categoryId, trackChanges);
 
-        var product = await _repository.ProductRepository.GetSingleProductForCategoryAsync(categoryId, productId, trackChanges);
-        if (product is null)
-            throw new ProductNotFoundException(productId);
-
+        var product = await GetProductForCategoryAndCheckIfExistsAsync(categoryId, productId, trackChanges);
         var productDto = _mapper.Map<ProductDto>(product);
+        
         return productDto;
     }
 
@@ -102,15 +95,33 @@ internal sealed class ProductService : IProductService
     /// </returns>
     public async Task<IEnumerable<ProductDto>> GetProductsForBrandAsync(Guid brandId, bool trackChanges)
     {
-        var brand = await _repository.BrandRepository.GetBrandByIdAsync(brandId, trackChanges);
-
-        if (brand is null)
-            throw new BrandNotFoundException(brandId);
+        await CheckIfBrandExistsAsync(brandId, trackChanges);
 
         var products = await _repository.ProductRepository.GetProductsForBrandAsync(brandId, trackChanges);
-        var productsDto = _mapper.Map<IEnumerable<ProductDto>>(products);
+        var productsDtos = _mapper.Map<IEnumerable<ProductDto>>(products);
 
-        return productsDto;
+        return productsDtos;
+    }
+
+    /// <summary>
+    /// Gets the paged products for brand.
+    /// </summary>
+    /// <param name="brandId">Brand identifier.</param>
+    /// <param name="productParameters">Product parameters.</param>
+    /// <param name="trackChanges">Used to improve the performance of read-only queries.</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation.
+    /// The task result contains the paged products.
+    /// </returns>
+    public async Task<(IEnumerable<ProductDto> Products, MetaData MetaData)> GetPagedProductsForBrandAsync(Guid brandId, ProductParameters productParameters, bool trackChanges)
+    {
+        await CheckIfBrandExistsAsync(brandId, trackChanges);
+
+        var productsWithMetaData = await _repository.ProductRepository.GetPagedProductsForBrandAsync(brandId, productParameters, trackChanges);
+
+        var productsDtos = _mapper.Map<IEnumerable<ProductDto>>(productsWithMetaData);
+
+        return (Products: productsDtos, MetaData: productsWithMetaData.MetaData);
     }
 
     /// <summary>
@@ -124,15 +135,12 @@ internal sealed class ProductService : IProductService
     /// </returns>
     public async Task<IEnumerable<ProductDto>> GetProductsForCategoryAsync(Guid categoryId, bool trackChanges)
     {
-        var category = await _repository.CategoryRepository.GetCategoryByIdAsync(categoryId, trackChanges);
-
-        if (category is null)
-            throw new CategoryNotFoundException(categoryId);
+        await CheckIfCategoryExistsAsync(categoryId, trackChanges);
 
         var products = await _repository.ProductRepository.GetProductsForCategoryAsync(categoryId, trackChanges);
-        var productsDto = _mapper.Map<IEnumerable<ProductDto>>(products);
+        var productsDtos = _mapper.Map<IEnumerable<ProductDto>>(products);
 
-        return productsDto;
+        return productsDtos;
     }
 
     /// <summary>
@@ -147,9 +155,7 @@ internal sealed class ProductService : IProductService
     /// </returns>
     public async Task<ProductDto> CreateProductForBrandAsync(Guid brandId, ProductForCreationDto productForCreationDto, bool trackChanges)
     {
-        var brand = await _repository.BrandRepository.GetBrandByIdAsync(brandId, trackChanges);
-        if (brand is null)
-            throw new BrandNotFoundException(brandId);
+        await CheckIfBrandExistsAsync(brandId, trackChanges);
 
         var product = _mapper.Map<Product>(productForCreationDto);
 
@@ -173,13 +179,9 @@ internal sealed class ProductService : IProductService
     public async Task UpdateProductForBrandAsync(Guid brandId, Guid productId, ProductForUpdateDto productForUpdateDto, 
         bool brandTrackChanges, bool productTrackChanges)
     {
-        var brand = await _repository.BrandRepository.GetBrandByIdAsync(brandId, brandTrackChanges);
-        if (brand is null)
-            throw new BrandNotFoundException(brandId);
+        await CheckIfBrandExistsAsync(brandId, brandTrackChanges);
         
-        var product = await _repository.ProductRepository.GetSingleProductForBrandAsync(brandId, productId, productTrackChanges);
-        if (product is null)
-            throw new ProductNotFoundException(productId);
+        var product = await GetProductForBrandAndCheckIfExistsAsync(brandId, productId, productTrackChanges);
         
         _mapper.Map(productForUpdateDto, product);
         await _repository.SaveAsync();
@@ -194,15 +196,75 @@ internal sealed class ProductService : IProductService
     /// <returns>A task that represents the asynchronous operation.</returns>
     public async Task DeleteProductForBrandAsync(Guid brandId, Guid productId, bool trackChanges)
     {
+        await CheckIfBrandExistsAsync(brandId, trackChanges);
+
+        var product = await GetProductForBrandAndCheckIfExistsAsync(brandId, productId, trackChanges);
+
+        _repository.ProductRepository.DeleteProduct(product);
+        await _repository.SaveAsync();
+    }
+
+    /// <summary>
+    /// Checks if the brand exists.
+    /// </summary>
+    /// <param name="brandId">Brand identifier.</param>
+    /// <param name="trackChanges">Used to improve the performance of read-only queries.</param>
+    /// <returns>A task that represents the asynchronous operation.</returns>
+    private async Task CheckIfBrandExistsAsync(Guid brandId, bool trackChanges)
+    {
         var brand = await _repository.BrandRepository.GetBrandByIdAsync(brandId, trackChanges);
         if (brand is null)
             throw new BrandNotFoundException(brandId);
+    }
 
+    /// <summary>
+    /// Gets a product for brand and checks if it exists.
+    /// </summary>
+    /// <param name="brandId">Brand identifier.</param>
+    /// <param name="productId">Product identifier.</param>
+    /// <param name="trackChanges">Used to improve the performance of read-only queries.</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation.
+    /// The task result contains a product.
+    /// </returns>
+    private async Task<Product> GetProductForBrandAndCheckIfExistsAsync(Guid brandId, Guid productId, bool trackChanges)
+    {
         var product = await _repository.ProductRepository.GetSingleProductForBrandAsync(brandId, productId, trackChanges);
         if (product is null)
             throw new ProductNotFoundException(productId);
 
-        _repository.ProductRepository.DeleteProduct(product);
-        await _repository.SaveAsync();
+        return product;
+    }
+
+    /// <summary>
+    /// Checks if the category exists.
+    /// </summary>
+    /// <param name="categoryId">Category identifier.</param>
+    /// <param name="trackChanges">Used to improve the performance of read-only queries.</param>
+    /// <returns>A task that represents the asynchronous operation.</returns>
+    private async Task CheckIfCategoryExistsAsync(Guid categoryId, bool trackChanges)
+    {
+        var category = await _repository.CategoryRepository.GetCategoryByIdAsync(categoryId, trackChanges);
+        if (category is null)
+            throw new CategoryNotFoundException(categoryId);
+    }
+
+    /// <summary>
+    /// Gets a product for category and checks if it exists.
+    /// </summary>
+    /// <param name="categoryId">Category identifier.</param>
+    /// <param name="productId">Product identifier.</param>
+    /// <param name="trackChanges">Used to improve the performance of read-only queries.</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation.
+    /// The task result contains a product.
+    /// </returns>
+    private async Task<Product> GetProductForCategoryAndCheckIfExistsAsync(Guid categoryId, Guid productId, bool trackChanges)
+    {
+        var product = await _repository.ProductRepository.GetSingleProductForCategoryAsync(categoryId, productId, trackChanges);
+        if (product is null)
+            throw new ProductNotFoundException(productId);
+
+        return product;
     }
 }

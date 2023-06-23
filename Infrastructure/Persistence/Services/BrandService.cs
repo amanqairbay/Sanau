@@ -56,10 +56,7 @@ internal sealed class BrandService : IBrandService
     /// </returns>
     public async Task<BrandDto?> GetBrandByIdAsync(Guid brandId, bool trackChanges)
     {
-        var brand = await _repository.BrandRepository.GetBrandByIdAsync(brandId, trackChanges);
-        
-        if (brand is null) 
-            throw new BrandNotFoundException(brandId);
+        var brand = await GetBrandAndCheckIfItExists(brandId, trackChanges);
         
         var brandDto = _mapper.Map<BrandDto>(brand);
         return brandDto;
@@ -141,6 +138,21 @@ internal sealed class BrandService : IBrandService
     }
 
     /// <summary>
+    /// Updates a brand.
+    /// </summary>
+    /// <param name="brandId">Brand identifier.</param>
+    /// <param name="brandForUpdateDto">Brand data transfer object for update.</param>
+    /// <param name="trackChanges">Used to improve the performance of read-only queries.</param>
+    /// <returns>A task that represents the asynchronous operation.</returns>
+    public async Task UpdateBrandAsync(Guid brandId, BrandForUpdateDto brandForUpdateDto, bool trackChanges)
+    {
+        var brand = await GetBrandAndCheckIfItExists(brandId, trackChanges);
+
+        _mapper.Map(brandForUpdateDto, brand);
+        await _repository.SaveAsync();
+    }
+
+    /// <summary>
     /// Deletes a brand.
     /// </summary>
     /// <param name="brandId">Brand identifier.</param>
@@ -148,28 +160,27 @@ internal sealed class BrandService : IBrandService
     /// <returns>A task that represents the asynchronous operation.</returns>
     public async Task DeleteBrandAsync(Guid brandId, bool trackChanges)
     {
-        var brand = await _repository.BrandRepository.GetBrandByIdAsync(brandId, trackChanges);
-        if (brand is null)
-            throw new BrandNotFoundException(brandId);
+        var brand = await GetBrandAndCheckIfItExists(brandId, trackChanges);
 
         _repository.BrandRepository.DeleteBrand(brand);
         await _repository.SaveAsync();
     }
 
     /// <summary>
-    /// Updates a brand.
+    /// Gets a company and checks if it exits.
     /// </summary>
     /// <param name="brandId">Brand identifier.</param>
-    /// <param name="brandForUpdateDto">Brand data transfer object for update.</param>
     /// <param name="trackChanges">Used to improve the performance of read-only queries.</param>
-    /// <returns></returns>
-    public async Task UpdateBrandAsync(Guid brandId, BrandForUpdateDto brandForUpdateDto, bool trackChanges)
+    /// <returns>
+    /// A task that represents the asynchronous operation.
+    /// The task result contains the brand.
+    /// </returns>
+    private async Task<Brand> GetBrandAndCheckIfItExists(Guid brandId, bool trackChanges)
     {
         var brand = await _repository.BrandRepository.GetBrandByIdAsync(brandId, trackChanges);
         if (brand is null)
             throw new BrandNotFoundException(brandId);
-
-        _mapper.Map(brandForUpdateDto, brand);
-        await _repository.SaveAsync();
+        
+        return brand;
     }
 }

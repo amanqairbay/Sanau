@@ -1,4 +1,5 @@
 using Application.Common.DTOs;
+using Application.Common.RequestFeatures;
 
 namespace Application.Services;
 
@@ -51,6 +52,18 @@ public interface IProductService
     /// The task result contains the products.
     /// </returns>
     Task<IEnumerable<ProductDto>> GetProductsForBrandAsync(Guid brandId, bool trackChanges);
+
+    /// <summary>
+    /// Gets the paged products for brand.
+    /// </summary>
+    /// <param name="brandId">Brand identifier.</param>
+    /// <param name="productParameters">Product parameters.</param>
+    /// <param name="trackChanges">Used to improve the performance of read-only queries.</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation.
+    /// The task result contains the paged products.
+    /// </returns>
+    Task<(IEnumerable<ProductDto> Products, MetaData MetaData)> GetPagedProductsForBrandAsync(Guid brandId, ProductParameters productParameters, bool trackChanges);
 
     /// <summary>
     /// Gets the products per category.
