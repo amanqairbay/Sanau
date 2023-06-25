@@ -19,7 +19,7 @@ public record ProductForCreationDto
     /// </summary>
     [Display(Name = "Price")]
     [Required]
-    [Range(0.01, 9999999, ErrorMessage = "{0} must be between {1} and {2}.")]
+    [Range(0.01, (double)decimal.MaxValue, ErrorMessage = "{0} must be between {1} and {2}.")]
     public decimal Price { get; init; }
     
     /// <summary>

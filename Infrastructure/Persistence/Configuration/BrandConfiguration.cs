@@ -21,6 +21,29 @@ public class BrandConfiguration : IEntityTypeConfiguration<Brand>
                 Id = new Guid("3d490a70-94ce-4d15-9494-5248280c2ce3"),
                 Name = "Samsung",
                 Description = "Samsung is is a South Korean multinational manufacturing conglomerate headquartered in Samsung Town, Seoul, South Korea."
+            },
+            new Brand
+            {
+                Id = new Guid("d68fe072-2a4c-4990-acdb-08db70f8ca7e"),
+                Name = "Xiaomi",
+                Description = "Xiaomi Corporation is a Chinese designer and manufacturer of consumer electronics and related software items."
+            },
+            new Brand
+            {
+                Id = new Guid("a00b5685-3066-4665-acdc-08db70f8ca7e"),
+                Name = "Dell",
+                Description = "Dell Inc. is an American based technology company. It develops, sells, repairs, and supports computers and related products and services."
+            },
+            new Brand
+            {
+                Id = new Guid("e2c7db35-24ee-4661-3f2a-08db7287ca33"),
+                Name = "Sony",
+                Description = "Sony is a Japanese multinational conglomerate corporation headquartered in Minato, Tokyo, Japan."
+            },new Brand
+            {
+                Id = new Guid("8203e247-da1b-4922-3f2b-08db7287ca33"),
+                Name = "Motorola",
+                Description = "Motorola is an American multinational telecommunications company based in Schaumburg, Illinois."
             }
         );
     }

@@ -54,6 +54,30 @@ namespace Persistence.Migrations
                             Id = new Guid("3d490a70-94ce-4d15-9494-5248280c2ce3"),
                             Description = "Samsung is is a South Korean multinational manufacturing conglomerate headquartered in Samsung Town, Seoul, South Korea.",
                             Name = "Samsung"
+                        },
+                        new
+                        {
+                            Id = new Guid("d68fe072-2a4c-4990-acdb-08db70f8ca7e"),
+                            Description = "Xiaomi Corporation is a Chinese designer and manufacturer of consumer electronics and related software items.",
+                            Name = "Xiaomi"
+                        },
+                        new
+                        {
+                            Id = new Guid("a00b5685-3066-4665-acdc-08db70f8ca7e"),
+                            Description = "Dell Inc. is an American based technology company. It develops, sells, repairs, and supports computers and related products and services.",
+                            Name = "Dell"
+                        },
+                        new
+                        {
+                            Id = new Guid("e2c7db35-24ee-4661-3f2a-08db7287ca33"),
+                            Description = "Sony is a Japanese multinational conglomerate corporation headquartered in Minato, Tokyo, Japan.",
+                            Name = "Sony"
+                        },
+                        new
+                        {
+                            Id = new Guid("8203e247-da1b-4922-3f2b-08db7287ca33"),
+                            Description = "Motorola is an American multinational telecommunications company based in Schaumburg, Illinois.",
+                            Name = "Motorola"
                         });
                 });
 
@@ -82,19 +106,25 @@ namespace Persistence.Migrations
                         {
                             Id = new Guid("9e6fb337-af84-4046-9a9c-ddc4e4e6e640"),
                             Description = "Category of electronic goods",
-                            Name = "Smartphone"
+                            Name = "Smartphones"
                         },
                         new
                         {
                             Id = new Guid("bd84693a-702e-4fb2-ba16-d93ae8e8e204"),
                             Description = "Category of electronic goods",
-                            Name = "Tablet"
+                            Name = "Tablets"
                         },
                         new
                         {
                             Id = new Guid("94a41fec-e15f-4d46-ac7d-2e648168f051"),
                             Description = "Category of electronic goods",
-                            Name = "Laptop"
+                            Name = "Laptops"
+                        },
+                        new
+                        {
+                            Id = new Guid("323c0bf7-c4b5-4b0c-58db-08db718ecbd1"),
+                            Description = "Category of electronic goods",
+                            Name = "Smartwatches"
                         });
                 });
 
@@ -116,7 +146,7 @@ namespace Persistence.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(38,2)");
 
                     b.HasKey("Id");
 
@@ -127,6 +157,14 @@ namespace Persistence.Migrations
                     b.ToTable("Products");
 
                     b.HasData(
+                        new
+                        {
+                            Id = new Guid("e2a61f54-c74d-4ebf-fd82-08db73e17d2c"),
+                            BrandId = new Guid("c9d4c053-49b6-410c-bc78-2d54a9991870"),
+                            CategoryId = new Guid("9e6fb337-af84-4046-9a9c-ddc4e4e6e640"),
+                            Name = "Apple iPhone 14 Pro 256Gb",
+                            Price = 1120m
+                        },
                         new
                         {
                             Id = new Guid("f31707ce-d118-45a0-86fe-bbcfed519301"),
@@ -158,6 +196,30 @@ namespace Persistence.Migrations
                             CategoryId = new Guid("bd84693a-702e-4fb2-ba16-d93ae8e8e204"),
                             Name = "Apple iPad 11 128Gb",
                             Price = 930m
+                        },
+                        new
+                        {
+                            Id = new Guid("b04d673e-7317-4524-fd7f-08db73e17d2c"),
+                            BrandId = new Guid("c9d4c053-49b6-410c-bc78-2d54a9991870"),
+                            CategoryId = new Guid("323c0bf7-c4b5-4b0c-58db-08db718ecbd1"),
+                            Name = "Apple Silver Aluminum Case with Sport Band",
+                            Price = 399m
+                        },
+                        new
+                        {
+                            Id = new Guid("fdb7556f-f61a-4024-fd80-08db73e17d2c"),
+                            BrandId = new Guid("c9d4c053-49b6-410c-bc78-2d54a9991870"),
+                            CategoryId = new Guid("323c0bf7-c4b5-4b0c-58db-08db718ecbd1"),
+                            Name = "Apple Starlight Aluminum Case with Braided Solo Loop",
+                            Price = 449m
+                        },
+                        new
+                        {
+                            Id = new Guid("34712f2c-46d5-4920-fd81-08db73e17d2c"),
+                            BrandId = new Guid("c9d4c053-49b6-410c-bc78-2d54a9991870"),
+                            CategoryId = new Guid("323c0bf7-c4b5-4b0c-58db-08db718ecbd1"),
+                            Name = "Apple Midnight Aluminum Case with Sport Loop",
+                            Price = 1120m
                         },
                         new
                         {
@@ -193,6 +255,14 @@ namespace Persistence.Migrations
                         },
                         new
                         {
+                            Id = new Guid("b295bbe2-03c8-437a-de07-08db71b2f7e8"),
+                            BrandId = new Guid("3d490a70-94ce-4d15-9494-5248280c2ce3"),
+                            CategoryId = new Guid("9e6fb337-af84-4046-9a9c-ddc4e4e6e640"),
+                            Name = "Samsung Galaxy A03 4Gb/64Gb",
+                            Price = 145m
+                        },
+                        new
+                        {
                             Id = new Guid("def34053-91a6-4086-bfe6-19115867d5bb"),
                             BrandId = new Guid("3d490a70-94ce-4d15-9494-5248280c2ce3"),
                             CategoryId = new Guid("bd84693a-702e-4fb2-ba16-d93ae8e8e204"),
@@ -222,6 +292,14 @@ namespace Persistence.Migrations
                             CategoryId = new Guid("94a41fec-e15f-4d46-ac7d-2e648168f051"),
                             Name = "Samsung Galaxy Book3 Pro 360",
                             Price = 1100m
+                        },
+                        new
+                        {
+                            Id = new Guid("5bcdada4-71ef-45e2-b3c3-08db731e86dd"),
+                            BrandId = new Guid("8203e247-da1b-4922-3f2b-08db7287ca33"),
+                            CategoryId = new Guid("9e6fb337-af84-4046-9a9c-ddc4e4e6e640"),
+                            Name = "Motorola Razr 64Gb",
+                            Price = 230m
                         });
                 });
 

@@ -21,7 +21,7 @@ public class Product : BaseEntity
     /// </summary>
     /// <value></value>
     [Required(ErrorMessage = "Price is a required field.")]
-    [Column(TypeName = "decimal(18,4)")]
+    [Column(TypeName = "decimal(38,2)")]
     public decimal Price { get; set; }
 
     /// <summary>

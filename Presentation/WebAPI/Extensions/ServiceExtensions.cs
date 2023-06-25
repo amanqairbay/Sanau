@@ -7,6 +7,7 @@ using Persistence.Context;
 using Persistence.Logging;
 using Persistence.Repositories;
 using Persistence.Services;
+using WebAPI.ActionFilters;
 
 namespace WebAPI.Extensions;
 
@@ -20,8 +21,7 @@ public static class ServiceExtensions
     /// </summary>
     /// <param name="services">The Microsoft.Extensions.DependencyInjection.IServiceCollection to add services to.</param>
     public static void AddConfigureCors(this IServiceCollection services) => 
-        services.AddCors(options => 
-        {
+        services.AddCors(options => {
             options.AddPolicy("CorsPolicy", builder => 
                 builder.AllowAnyOrigin()
                 .AllowAnyMethod()
@@ -50,15 +50,14 @@ public static class ServiceExtensions
     public static void AddConfigureAutoMapper(this IServiceCollection services) => 
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-    public static void AddConfigureApiBehaviorOprions(this IServiceCollection services) => 
-        services.Configure<ApiBehaviorOptions>(options => 
-        {
-            options.SuppressModelStateInvalidFilter = true;
-        });
+    public static void AddConfigureApiBehaviorOptions(this IServiceCollection services) => 
+        services.Configure<ApiBehaviorOptions>(options => { options.SuppressModelStateInvalidFilter = true; });
+
+    public static void AddConfigureValidationFilterAttribute(this IServiceCollection services) => 
+        services.AddScoped<ValidationFilterAttribute>();
 
     public static void AddConfigureControllers(this IServiceCollection services) => 
-        services.AddControllers(config => 
-        {
+        services.AddControllers(config => {
             config.RespectBrowserAcceptHeader = true;
             config.ReturnHttpNotAcceptable = true;
         }).AddXmlDataContractSerializerFormatters();

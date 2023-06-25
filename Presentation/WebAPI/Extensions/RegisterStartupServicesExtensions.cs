@@ -24,8 +24,8 @@ public static class RegisterStartupServicesExtensions
         builder.Services.AddConfigureServiceManager();
         builder.Services.AddConfigureSqlContext(configuration);
         builder.Services.AddConfigureAutoMapper();
-        builder.Services.AddConfigureApiBehaviorOprions();
-        builder.Services.AddScoped<ValidationFilterAttribute>();
+        builder.Services.AddConfigureApiBehaviorOptions();
+        builder.Services.AddConfigureValidationFilterAttribute();
         
         builder.Services.AddConfigureControllers();
         builder.Services.AddEndpointsApiExplorer();

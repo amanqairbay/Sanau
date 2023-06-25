@@ -12,6 +12,14 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         (
             new Product
             {
+                Id = new Guid("e2a61f54-c74d-4ebf-fd82-08db73e17d2c"),
+                Name = "Apple iPhone 14 Pro 256Gb",
+                Price = 1120,
+                BrandId = new Guid("c9d4c053-49b6-410c-bc78-2d54a9991870"),
+                CategoryId = new Guid("9e6fb337-af84-4046-9a9c-ddc4e4e6e640")
+            },
+            new Product
+            {
                 Id = new Guid("f31707ce-d118-45a0-86fe-bbcfed519301"),
                 Name = "Apple iPhone 14 Pro 128Gb",
                 Price = 920,
@@ -41,6 +49,30 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
                 Price = 930,
                 BrandId = new Guid("c9d4c053-49b6-410c-bc78-2d54a9991870"),
                 CategoryId = new Guid("bd84693a-702e-4fb2-ba16-d93ae8e8e204")
+            },
+            new Product
+            {
+                Id = new Guid("b04d673e-7317-4524-fd7f-08db73e17d2c"),
+                Name = "Apple Silver Aluminum Case with Sport Band",
+                Price = 399,
+                BrandId = new Guid("c9d4c053-49b6-410c-bc78-2d54a9991870"),
+                CategoryId = new Guid("323c0bf7-c4b5-4b0c-58db-08db718ecbd1")
+            },
+            new Product
+            {
+                Id = new Guid("fdb7556f-f61a-4024-fd80-08db73e17d2c"),
+                Name = "Apple Starlight Aluminum Case with Braided Solo Loop",
+                Price = 449,
+                BrandId = new Guid("c9d4c053-49b6-410c-bc78-2d54a9991870"),
+                CategoryId = new Guid("323c0bf7-c4b5-4b0c-58db-08db718ecbd1")
+            },
+            new Product
+            {
+                Id = new Guid("34712f2c-46d5-4920-fd81-08db73e17d2c"),
+                Name = "Apple Midnight Aluminum Case with Sport Loop",
+                Price = 1120,
+                BrandId = new Guid("c9d4c053-49b6-410c-bc78-2d54a9991870"),
+                CategoryId = new Guid("323c0bf7-c4b5-4b0c-58db-08db718ecbd1")
             },
             new Product
             {
@@ -76,6 +108,14 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
             },
             new Product
             {
+                Id = new Guid("b295bbe2-03c8-437a-de07-08db71b2f7e8"),
+                Name = "Samsung Galaxy A03 4Gb/64Gb",
+                Price = 145,
+                BrandId = new Guid("3d490a70-94ce-4d15-9494-5248280c2ce3"),
+                CategoryId = new Guid("9e6fb337-af84-4046-9a9c-ddc4e4e6e640")
+            },
+            new Product
+            {
                 Id = new Guid("def34053-91a6-4086-bfe6-19115867d5bb"),
                 Name = "Samsung Galaxy Tab A7 Lite 8.7 SM-T220",
                 Price = 110,
@@ -105,6 +145,14 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
                 Price = 1100,
                 BrandId = new Guid("3d490a70-94ce-4d15-9494-5248280c2ce3"),
                 CategoryId = new Guid("94a41fec-e15f-4d46-ac7d-2e648168f051")
+            },
+            new Product
+            {
+                Id = new Guid("5bcdada4-71ef-45e2-b3c3-08db731e86dd"),
+                Name = "Motorola Razr 64Gb",
+                Price = 230,
+                BrandId = new Guid("8203e247-da1b-4922-3f2b-08db7287ca33"),
+                CategoryId = new Guid("9e6fb337-af84-4046-9a9c-ddc4e4e6e640")
             }
         );
     }
