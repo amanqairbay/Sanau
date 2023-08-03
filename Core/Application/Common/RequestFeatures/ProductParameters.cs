@@ -8,12 +8,12 @@ public class ProductParameters : RequestParameters
     /// <summary>
     /// Gets or sets a product minimum price.
     /// </summary>
-    public decimal MinPrice { get; set; } = decimal.Zero;
+    public decimal MinPrice { get; set; } = 0; //TODO: to fix
 
     /// <summary>
     /// Gets or sets a product maximum price.
     /// </summary>
-    public decimal MaxPrice { get; set; } = decimal.MaxValue;
+    public decimal MaxPrice { get; set; } = 100_000_000_000M;
 
     /// <summary>
     /// Gets a product valid price range.

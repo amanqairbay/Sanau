@@ -19,7 +19,10 @@ public abstract class RequestParameters
     /// Page size.
     /// </summary>
     private int _pageSize = 10;
-    
+
+    /// <summary>
+    /// Gets or sets a page size.
+    /// </summary>
     public int PageSize
     {
         get 

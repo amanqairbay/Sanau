@@ -3,6 +3,7 @@ using Application.Repositories;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Context;
+using Persistence.Repositories.Extensions;
 
 namespace Persistence.Repositories;
 
@@ -40,7 +41,9 @@ public class ProductRepository : BaseRepository<Product>, IProductRepository
     /// </returns>
     public async Task<PagedList<Product>> GetPagedProductsAsync(ProductParameters productParameters, bool trackChanges)
     {
-        var products = await FindByCondition(p => p.Price >= productParameters.MinPrice && p.Price <= productParameters.MaxPrice, trackChanges)
+        var products = await FindAll(trackChanges)
+            .FilterProducts(productParameters.MinPrice, productParameters.MaxPrice)
+            .Search(productParameters.SearchTerm!)
             .Skip((productParameters.PageNumber - 1) * productParameters.PageSize)
             .Take(productParameters.PageSize)
             .ToListAsync();
@@ -89,7 +92,8 @@ public class ProductRepository : BaseRepository<Product>, IProductRepository
     /// </returns>
     public async Task<IEnumerable<Product>> GetProductsForBrandAsync(Guid brandId, bool trackChanges) => 
         await FindByCondition(p => p.BrandId.Equals(brandId), trackChanges)
-              .OrderBy(p => p.Name).ToListAsync();
+            .OrderBy(p => p.Name)
+            .ToListAsync();
 
     /// <summary>
     /// Gets the paged products for brand.
