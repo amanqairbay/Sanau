@@ -5,6 +5,7 @@ namespace Application.Common.RequestFeatures;
 /// </summary>
 public class ProductParameters : RequestParameters
 {
+    #region properties
     /// <summary>
     /// Gets or sets a product minimum price.
     /// </summary>
@@ -24,4 +25,11 @@ public class ProductParameters : RequestParameters
     /// Gets or sets a search term.
     /// </summary>
     public string? SearchTerm { get; set; }
+
+    #endregion properties
+
+    #region constructor
+    public ProductParameters() => OrderBy = "name";
+
+    #endregion constructor
 }

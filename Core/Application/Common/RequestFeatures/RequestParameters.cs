@@ -34,4 +34,9 @@ public abstract class RequestParameters
             _pageSize = (value > maxPageSize) ? maxPageSize : value;
         }
     }
+
+    /// <summary>
+    /// Gets or sets the elements by name.
+    /// </summary>
+    public string? OrderBy { get; set; }
 }

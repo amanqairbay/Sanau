@@ -44,6 +44,7 @@ public class ProductRepository : BaseRepository<Product>, IProductRepository
         var products = await FindAll(trackChanges)
             .FilterProducts(productParameters.MinPrice, productParameters.MaxPrice)
             .Search(productParameters.SearchTerm!)
+            .Sort(productParameters.OrderBy!)
             .Skip((productParameters.PageNumber - 1) * productParameters.PageSize)
             .Take(productParameters.PageSize)
             .ToListAsync();

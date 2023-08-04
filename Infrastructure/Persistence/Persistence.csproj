@@ -16,9 +16,11 @@
 
   <ItemGroup>
     <None Remove="Repositories\Extensions\" />
+    <None Remove="Repositories\Extensions\Utility\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Repositories\Extensions\" />
+    <Folder Include="Repositories\Extensions\Utility\" />
   </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
