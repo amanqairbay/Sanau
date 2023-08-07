@@ -25,6 +25,11 @@ public class Product : BaseEntity
     public decimal Price { get; set; }
 
     /// <summary>
+    /// Gets or sets the products image url.
+    /// </summary>
+    public string? ImageUrl { get; set; }
+
+    /// <summary>
     /// Gets or sets the brand identifier..
     /// </summary>
     [ForeignKey(nameof(Brand))]

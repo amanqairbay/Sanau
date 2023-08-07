@@ -3,21 +3,24 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence.Context;
 
 #nullable disable
 
-namespace Persistence.Migrations
+namespace Persistence.Persistence
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230806145051_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.7")
+                .HasAnnotation("ProductVersion", "7.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -33,6 +36,9 @@ namespace Persistence.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -47,36 +53,42 @@ namespace Persistence.Migrations
                         {
                             Id = new Guid("c9d4c053-49b6-410c-bc78-2d54a9991870"),
                             Description = "Apple Inc. is an American multinational technology company headquarted in Cupertino, California.",
+                            ImageUrl = "images/brands/logo/apple_black.png",
                             Name = "Apple"
                         },
                         new
                         {
                             Id = new Guid("3d490a70-94ce-4d15-9494-5248280c2ce3"),
                             Description = "Samsung is is a South Korean multinational manufacturing conglomerate headquartered in Samsung Town, Seoul, South Korea.",
+                            ImageUrl = "images/brands/logo/samsung_blue.png",
                             Name = "Samsung"
                         },
                         new
                         {
                             Id = new Guid("d68fe072-2a4c-4990-acdb-08db70f8ca7e"),
                             Description = "Xiaomi Corporation is a Chinese designer and manufacturer of consumer electronics and related software items.",
+                            ImageUrl = "images/brands/logo/xiaomi.png",
                             Name = "Xiaomi"
                         },
                         new
                         {
                             Id = new Guid("a00b5685-3066-4665-acdc-08db70f8ca7e"),
                             Description = "Dell Inc. is an American based technology company. It develops, sells, repairs, and supports computers and related products and services.",
+                            ImageUrl = "images/brands/logo/dell.png",
                             Name = "Dell"
                         },
                         new
                         {
                             Id = new Guid("e2c7db35-24ee-4661-3f2a-08db7287ca33"),
                             Description = "Sony is a Japanese multinational conglomerate corporation headquartered in Minato, Tokyo, Japan.",
+                            ImageUrl = "images/brands/logo/sony.png",
                             Name = "Sony"
                         },
                         new
                         {
                             Id = new Guid("8203e247-da1b-4922-3f2b-08db7287ca33"),
                             Description = "Motorola is an American multinational telecommunications company based in Schaumburg, Illinois.",
+                            ImageUrl = "images/brands/logo/motorola.png",
                             Name = "Motorola"
                         });
                 });
@@ -140,6 +152,9 @@ namespace Persistence.Migrations
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -162,7 +177,8 @@ namespace Persistence.Migrations
                             Id = new Guid("e2a61f54-c74d-4ebf-fd82-08db73e17d2c"),
                             BrandId = new Guid("c9d4c053-49b6-410c-bc78-2d54a9991870"),
                             CategoryId = new Guid("9e6fb337-af84-4046-9a9c-ddc4e4e6e640"),
-                            Name = "Apple iPhone 14 Pro 256Gb",
+                            ImageUrl = "images/brands/products/apple_iphone_14_pro_256gb_deep_purple.jpeg",
+                            Name = "Apple iPhone 14 Pro 256Gb Deep Purple",
                             Price = 1120m
                         },
                         new
@@ -170,7 +186,8 @@ namespace Persistence.Migrations
                             Id = new Guid("f31707ce-d118-45a0-86fe-bbcfed519301"),
                             BrandId = new Guid("c9d4c053-49b6-410c-bc78-2d54a9991870"),
                             CategoryId = new Guid("9e6fb337-af84-4046-9a9c-ddc4e4e6e640"),
-                            Name = "Apple iPhone 14 Pro 128Gb",
+                            ImageUrl = "images/brands/products/apple_iphone_14_pro_128gb_gold.jpeg",
+                            Name = "Apple iPhone 14 Pro 128Gb Gold",
                             Price = 920m
                         },
                         new
@@ -178,7 +195,8 @@ namespace Persistence.Migrations
                             Id = new Guid("c0cbd5fe-454b-4be9-a4b0-859d70c8cc82"),
                             BrandId = new Guid("c9d4c053-49b6-410c-bc78-2d54a9991870"),
                             CategoryId = new Guid("9e6fb337-af84-4046-9a9c-ddc4e4e6e640"),
-                            Name = "Apple iPhone 12 128Gb",
+                            ImageUrl = "images/brands/products/apple_iphone_12_128gb_silver.jpeg",
+                            Name = "Apple iPhone 12 128Gb Silver",
                             Price = 420m
                         },
                         new
@@ -186,7 +204,8 @@ namespace Persistence.Migrations
                             Id = new Guid("41d749b4-6381-4281-a513-eb5552a22996"),
                             BrandId = new Guid("c9d4c053-49b6-410c-bc78-2d54a9991870"),
                             CategoryId = new Guid("bd84693a-702e-4fb2-ba16-d93ae8e8e204"),
-                            Name = "Apple iPad 10.2 64Gb",
+                            ImageUrl = "images/brands/products/apple_ipad_10.2_64gb_space_grey.jpeg",
+                            Name = "Apple iPad 10.2 64Gb Space Grey",
                             Price = 260m
                         },
                         new
@@ -194,7 +213,8 @@ namespace Persistence.Migrations
                             Id = new Guid("39348e22-1a62-444c-b62b-575ece82c251"),
                             BrandId = new Guid("c9d4c053-49b6-410c-bc78-2d54a9991870"),
                             CategoryId = new Guid("bd84693a-702e-4fb2-ba16-d93ae8e8e204"),
-                            Name = "Apple iPad 11 128Gb",
+                            ImageUrl = "images/brands/products/apple_ipad_11_128gb_silver.jpeg",
+                            Name = "Apple iPad 11 128Gb Silver",
                             Price = 930m
                         },
                         new
@@ -202,6 +222,7 @@ namespace Persistence.Migrations
                             Id = new Guid("b04d673e-7317-4524-fd7f-08db73e17d2c"),
                             BrandId = new Guid("c9d4c053-49b6-410c-bc78-2d54a9991870"),
                             CategoryId = new Guid("323c0bf7-c4b5-4b0c-58db-08db718ecbd1"),
+                            ImageUrl = "images/brands/products/apple_silver_aluminum_case_with_sport_band.jpeg",
                             Name = "Apple Silver Aluminum Case with Sport Band",
                             Price = 399m
                         },
@@ -210,6 +231,7 @@ namespace Persistence.Migrations
                             Id = new Guid("fdb7556f-f61a-4024-fd80-08db73e17d2c"),
                             BrandId = new Guid("c9d4c053-49b6-410c-bc78-2d54a9991870"),
                             CategoryId = new Guid("323c0bf7-c4b5-4b0c-58db-08db718ecbd1"),
+                            ImageUrl = "images/brands/products/apple_starlight_aluminum_case_with_braided_solo_loop.jpeg",
                             Name = "Apple Starlight Aluminum Case with Braided Solo Loop",
                             Price = 449m
                         },
@@ -218,6 +240,7 @@ namespace Persistence.Migrations
                             Id = new Guid("34712f2c-46d5-4920-fd81-08db73e17d2c"),
                             BrandId = new Guid("c9d4c053-49b6-410c-bc78-2d54a9991870"),
                             CategoryId = new Guid("323c0bf7-c4b5-4b0c-58db-08db718ecbd1"),
+                            ImageUrl = "images/brands/products/apple_midnight_aluminum_case_with_sport_loop.jpeg",
                             Name = "Apple Midnight Aluminum Case with Sport Loop",
                             Price = 1120m
                         },
@@ -226,6 +249,7 @@ namespace Persistence.Migrations
                             Id = new Guid("aba5a6ca-2625-4d9a-9130-8fee866667ee"),
                             BrandId = new Guid("c9d4c053-49b6-410c-bc78-2d54a9991870"),
                             CategoryId = new Guid("94a41fec-e15f-4d46-ac7d-2e648168f051"),
+                            ImageUrl = "images/brands/products/apple_macbook_air_13_mgn63_silver.jpeg",
                             Name = "Apple MacBook Air 13 MGN63 Silver",
                             Price = 970m
                         },
@@ -234,6 +258,7 @@ namespace Persistence.Migrations
                             Id = new Guid("b48f982c-02a5-47b0-922b-b8ac76524a39"),
                             BrandId = new Guid("c9d4c053-49b6-410c-bc78-2d54a9991870"),
                             CategoryId = new Guid("94a41fec-e15f-4d46-ac7d-2e648168f051"),
+                            ImageUrl = "images/brands/products/apple_macbook_air_13_mgnd3_gold.jpeg",
                             Name = "Apple MacBook Air 13 MGND3 Gold",
                             Price = 1000m
                         },
@@ -242,7 +267,8 @@ namespace Persistence.Migrations
                             Id = new Guid("b2c21d7d-410d-4435-b86d-82590ae58937"),
                             BrandId = new Guid("3d490a70-94ce-4d15-9494-5248280c2ce3"),
                             CategoryId = new Guid("9e6fb337-af84-4046-9a9c-ddc4e4e6e640"),
-                            Name = "Samsung Galaxy A23 6Gb/128Gb",
+                            ImageUrl = "images/brands/products/samsung_galaxy_a23 6gb_128gb_black.jpeg",
+                            Name = "Samsung Galaxy A23 6Gb/128Gb Black",
                             Price = 210m
                         },
                         new
@@ -250,7 +276,8 @@ namespace Persistence.Migrations
                             Id = new Guid("d25d4d14-bf96-4dee-a5b3-d3bd0a083ade"),
                             BrandId = new Guid("3d490a70-94ce-4d15-9494-5248280c2ce3"),
                             CategoryId = new Guid("9e6fb337-af84-4046-9a9c-ddc4e4e6e640"),
-                            Name = "Samsung Galaxy A13 4Gb/64Gb",
+                            ImageUrl = "images/brands/products/samsung_galaxy_a13_4gb_64gb_blue.jpeg",
+                            Name = "Samsung Galaxy A13 4Gb/64Gb Blue",
                             Price = 160m
                         },
                         new
@@ -258,7 +285,8 @@ namespace Persistence.Migrations
                             Id = new Guid("b295bbe2-03c8-437a-de07-08db71b2f7e8"),
                             BrandId = new Guid("3d490a70-94ce-4d15-9494-5248280c2ce3"),
                             CategoryId = new Guid("9e6fb337-af84-4046-9a9c-ddc4e4e6e640"),
-                            Name = "Samsung Galaxy A03 4Gb/64Gb",
+                            ImageUrl = "images/brands/products/samsung_galaxy_a03_4gb_64gb_blue.jpeg",
+                            Name = "Samsung Galaxy A03 4Gb/64Gb Blue",
                             Price = 145m
                         },
                         new
@@ -266,7 +294,8 @@ namespace Persistence.Migrations
                             Id = new Guid("def34053-91a6-4086-bfe6-19115867d5bb"),
                             BrandId = new Guid("3d490a70-94ce-4d15-9494-5248280c2ce3"),
                             CategoryId = new Guid("bd84693a-702e-4fb2-ba16-d93ae8e8e204"),
-                            Name = "Samsung Galaxy Tab A7 Lite 8.7 SM-T220",
+                            ImageUrl = "images/brands/products/samsung_galaxy_tab_a7_lite_8.7_sm-t220_gray.jpeg",
+                            Name = "Samsung Galaxy Tab A7 Lite 8.7 SM-T220 Gray",
                             Price = 110m
                         },
                         new
@@ -274,7 +303,8 @@ namespace Persistence.Migrations
                             Id = new Guid("cfcec647-6934-4627-9fdb-8694ca5302ff"),
                             BrandId = new Guid("3d490a70-94ce-4d15-9494-5248280c2ce3"),
                             CategoryId = new Guid("bd84693a-702e-4fb2-ba16-d93ae8e8e204"),
-                            Name = "Samsung Galaxy Tab A8 10.5 SM-X205N",
+                            ImageUrl = "images/brands/products/samsung_galaxy_tab_a8_10.5_sm-x205n_gray.jpeg",
+                            Name = "Samsung Galaxy Tab A8 10.5 SM-X205N Gray",
                             Price = 220m
                         },
                         new
@@ -282,6 +312,7 @@ namespace Persistence.Migrations
                             Id = new Guid("6519c192-93c5-48e6-bb34-04ed481f90ca"),
                             BrandId = new Guid("3d490a70-94ce-4d15-9494-5248280c2ce3"),
                             CategoryId = new Guid("94a41fec-e15f-4d46-ac7d-2e648168f051"),
+                            ImageUrl = "images/brands/products/samsung_galaxy_book3_ultra.jpeg",
                             Name = "Samsung Galaxy Book3 Ultra",
                             Price = 800m
                         },
@@ -290,6 +321,7 @@ namespace Persistence.Migrations
                             Id = new Guid("8d8a7376-49ee-4f6c-89c0-f555c04b4caa"),
                             BrandId = new Guid("3d490a70-94ce-4d15-9494-5248280c2ce3"),
                             CategoryId = new Guid("94a41fec-e15f-4d46-ac7d-2e648168f051"),
+                            ImageUrl = "images/brands/products/samsung_galaxy_book3_pro_360.jpeg",
                             Name = "Samsung Galaxy Book3 Pro 360",
                             Price = 1100m
                         },
@@ -298,6 +330,7 @@ namespace Persistence.Migrations
                             Id = new Guid("5bcdada4-71ef-45e2-b3c3-08db731e86dd"),
                             BrandId = new Guid("8203e247-da1b-4922-3f2b-08db7287ca33"),
                             CategoryId = new Guid("9e6fb337-af84-4046-9a9c-ddc4e4e6e640"),
+                            ImageUrl = "images/brands/products/motorola_razr_64gb.jpeg",
                             Name = "Motorola Razr 64Gb",
                             Price = 230m
                         });

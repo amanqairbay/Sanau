@@ -19,4 +19,9 @@ public record BrandDto
     /// Gets or initializes a brand description.
     /// </summary>
     public string? Description { get; init; }
+
+    /// <summary>
+    /// Gets or initializes a brand image url.
+    /// </summary>
+    public string? ImageUrl { get; init; }
 }

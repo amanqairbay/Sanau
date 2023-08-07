@@ -1,4 +1,5 @@
 using Application.Common.DTOs;
+using Application.Common.Helpers;
 using AutoMapper;
 using Domain.Entities;
 
@@ -11,9 +12,13 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<Brand, BrandDto>();
+#nullable disable
+        CreateMap<Brand, BrandDto>()
+            .ForMember(d => d.ImageUrl, o => o.MapFrom<ImageUrlResolver<Brand, BrandDto>>());
+
         CreateMap<Category, CategoryDto>();
-        CreateMap<Product, ProductDto>();
+        CreateMap<Product, ProductDto>()
+            .ForMember(d => d.ImageUrl, o => o.MapFrom<ImageUrlResolver<Product, ProductDto>>());
 
         CreateMap<BrandForCreationDto, Brand>();
         CreateMap<CategoryForCreationDto, Category>();
@@ -21,5 +26,6 @@ public class MappingProfile : Profile
 
         CreateMap<ProductForUpdateDto, Product>();
         CreateMap<BrandForUpdateDto, Brand>();
+#nullable disable
     }
 }

@@ -26,6 +26,7 @@ public static class RegisterStartupMiddlewaresExtensions
             app.UseHsts();
         }
 
+        app.UseStaticFiles();
         app.UseHttpsRedirection();
         
         // UseForwardedHeaders() will forward proxy headers to the current request. 

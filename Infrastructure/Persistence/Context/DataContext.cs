@@ -28,6 +28,7 @@ public class DataContext : DbContext
 #endregion fields
 
 #region constructor
+
     public DataContext(DbContextOptions options) : base(options) { }
 
 #endregion constructor

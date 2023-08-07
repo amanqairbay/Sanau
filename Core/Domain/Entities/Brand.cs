@@ -21,7 +21,12 @@ public class Brand : BaseEntity
     [Required(ErrorMessage = "Brand description is a required field.")]
     [MaxLength(200, ErrorMessage = "Maximum length for the Description is 200 characters.")] 
     public string? Description { get; set; }
-    
+
+    /// <summary>
+    /// Gets or sets the beands image url.
+    /// </summary>
+    public string? ImageUrl { get; set; }
+
     /// <summary>
     /// Gets or sets the products.
     /// </summary>
