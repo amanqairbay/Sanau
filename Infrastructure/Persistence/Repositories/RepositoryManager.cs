@@ -1,5 +1,6 @@
 using Application.Repositories;
 using Persistence.Context;
+using StackExchange.Redis;
 
 namespace Persistence.Repositories;
 
@@ -17,6 +18,7 @@ public class RepositoryManager : IRepositoryManager
 
     private readonly DataContext _dataContext;
     private readonly Lazy<IBrandRepository> _brandRepository;
+    private readonly Lazy<IBasketRepository> _basketRepository;
     private readonly Lazy<ICategoryRepository> _categoryRepository;
     private readonly Lazy<IProductRepository> _productRepository;
 
@@ -27,6 +29,11 @@ public class RepositoryManager : IRepositoryManager
     /// Gets a brand repository. 
     /// </summary>
     public IBrandRepository BrandRepository => _brandRepository.Value;
+
+    /// <summary>
+    /// Gets a basket repository. 
+    /// </summary>
+    public IBasketRepository BasketRepository => _basketRepository.Value;
 
     /// <summary>
     /// Gets a category repository. 
@@ -42,13 +49,15 @@ public class RepositoryManager : IRepositoryManager
 
 #region constructor
 
-    public RepositoryManager(DataContext dataContext)
+    public RepositoryManager(DataContext dataContext, IConnectionMultiplexer redis)
     {
         _dataContext = dataContext;
         _brandRepository = new Lazy<IBrandRepository>(() => new BrandRepository(dataContext));
+        _basketRepository = new Lazy<IBasketRepository>(() => new BasketRepository(redis));
         _categoryRepository = new Lazy<ICategoryRepository>(() => new CategoryRepository(dataContext));
         _productRepository = new Lazy<IProductRepository>(() => new ProductRepository(dataContext));
     }
+
 #endregion constructor
 
     /// <summary>

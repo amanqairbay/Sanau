@@ -7,6 +7,7 @@ using Persistence.Context;
 using Persistence.Logging;
 using Persistence.Repositories;
 using Persistence.Services;
+using StackExchange.Redis;
 using WebAPI.ActionFilters;
 
 namespace WebAPI.Extensions;
@@ -47,6 +48,13 @@ public static class ServiceExtensions
     public static void AddConfigureSqlContext(this IServiceCollection services, IConfiguration configuration) =>
         services.AddSqlServer<DataContext>((configuration.GetConnectionString("sqlConnection")));
 
+    public static void AddConfigureRedis(this IServiceCollection services, IConfiguration configuration) =>
+        services.AddSingleton<IConnectionMultiplexer>(c =>
+        {
+            var options = ConfigurationOptions.Parse(configuration.GetConnectionString("Redis")!);
+            return ConnectionMultiplexer.Connect(options);
+        });
+
     public static void AddConfigureAutoMapper(this IServiceCollection services) => 
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -57,8 +65,10 @@ public static class ServiceExtensions
         services.AddScoped<ValidationFilterAttribute>();
 
     public static void AddConfigureControllers(this IServiceCollection services) => 
-        services.AddControllers(config => {
+        services.AddControllers(config =>
+        {
             config.RespectBrowserAcceptHeader = true;
             config.ReturnHttpNotAcceptable = true;
-        }).AddXmlDataContractSerializerFormatters();
+        })
+        .AddXmlDataContractSerializerFormatters();
 }

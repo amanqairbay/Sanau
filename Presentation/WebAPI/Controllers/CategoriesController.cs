@@ -5,13 +5,11 @@ using WebAPI.ActionFilters;
 
 namespace WebAPI.Controllers;
 
-[ApiController]
-[Route("api/categories")]
-public class CategoryController : ControllerBase
+public class CategoriesController : BaseApiController
 {
     private readonly IServiceManager _service;
 
-    public CategoryController(IServiceManager service)
+    public CategoriesController(IServiceManager service)
     {
         _service = service;
     }

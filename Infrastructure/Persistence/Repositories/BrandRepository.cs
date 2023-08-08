@@ -1,4 +1,3 @@
-using Application.Common.Exceptions;
 using Application.Repositories;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;

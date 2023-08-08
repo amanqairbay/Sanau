@@ -8,13 +8,11 @@ using System.Text.Json;
 
 namespace WebAPI.Controllers;
 
-[ApiController]
-[Route("api/brands")]
-public class BrandController : ControllerBase
+public class BrandsController : BaseApiController
 {
     private readonly IServiceManager _service;
 
-    public BrandController(IServiceManager service)
+    public BrandsController(IServiceManager service)
     {
         _service = service;
     }

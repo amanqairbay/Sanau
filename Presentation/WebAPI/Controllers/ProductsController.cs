@@ -1,18 +1,15 @@
 using System.Text.Json;
-using Application.Common.DTOs;
 using Application.Common.RequestFeatures;
 using Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers;
 
-[ApiController]
-[Route("api/products")]
-public class ProductController : ControllerBase
+public class ProductsController : BaseApiController
 {
     private readonly IServiceManager _service;
 
-    public ProductController(IServiceManager service)
+    public ProductsController(IServiceManager service)
     {
         _service = service;
     }

@@ -23,6 +23,7 @@ public static class RegisterStartupServicesExtensions
         builder.Services.AddConfigureRepositoryManager();
         builder.Services.AddConfigureServiceManager();
         builder.Services.AddConfigureSqlContext(configuration);
+        builder.Services.AddConfigureRedis(configuration);
         builder.Services.AddConfigureAutoMapper();
         builder.Services.AddConfigureApiBehaviorOptions();
         builder.Services.AddConfigureValidationFilterAttribute();

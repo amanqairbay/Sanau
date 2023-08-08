@@ -8,6 +8,11 @@ public interface IRepositoryManager
     IBrandRepository BrandRepository { get; }
 
     /// <summary>
+    /// Gets a basket repository.
+    /// </summary>
+    IBasketRepository BasketRepository { get; }
+
+    /// <summary>
     /// Gets a category repository.
     /// </summary>
     ICategoryRepository CategoryRepository { get; } 

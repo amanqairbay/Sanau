@@ -11,6 +11,11 @@ public interface IServiceManager
     IBrandService BrandService { get; }
 
     /// <summary>
+    /// Gets a basket service.
+    /// </summary>
+    IBasketService BasketService { get; }
+
+    /// <summary>
     /// Gets a category service.
     /// </summary>
     ICategoryService CategoryService { get; }
