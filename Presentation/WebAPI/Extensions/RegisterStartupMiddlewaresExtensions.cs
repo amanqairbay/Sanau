@@ -29,14 +29,17 @@ public static class RegisterStartupMiddlewaresExtensions
         app.UseStaticFiles();
         app.UseHttpsRedirection();
         
-        // UseForwardedHeaders() will forward proxy headers to the current request. 
-        // This will help us during application deployment.
+        /* 
+            UseForwardedHeaders() will forward proxy headers to the current request. 
+            This will help us during application deployment.
+        */
         app.UseForwardedHeaders(new ForwardedHeadersOptions { ForwardedHeaders = ForwardedHeaders.All });
         app.UseCors("CorsPolicy");
+        app.UseAuthentication();
         app.UseAuthorization();
-
         app.MapControllers();
-
+        app.MigrateDatabase();
+        
         return app;
     }
 }

@@ -8,7 +8,11 @@ namespace WebAPI.ActionFilters;
 /// </summary>
 public class ValidationFilterAttribute : IActionFilter
 {
+    #region constructor
+
     public ValidationFilterAttribute() { }
+
+    #endregion constructor
 
     /// <summary>
     /// Called after the action executes, before the action result.
@@ -34,11 +38,9 @@ public class ValidationFilterAttribute : IActionFilter
             We use the ActionArguments dictionary to extract the DATA parameter that we send to the POST and PUT actions. 
         */
         var param = context.ActionArguments
-            .SingleOrDefault(x => x.Value!.ToString()!.Contains("Dto")).Value;
+            .SingleOrDefault(x => x.Value!.ToString()!.Contains("Dto"))
+            .Value;
 
-        /*
-
-        */
         if (param is null)
         {
             context.Result = new BadRequestObjectResult($"Object is null. Controller: {controller}, action: {action}");

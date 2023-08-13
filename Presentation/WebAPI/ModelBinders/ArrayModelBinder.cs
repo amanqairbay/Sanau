@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace WebAPI.ModelBinders;
 
+/// <summary>
+/// Represents an array model binder.
+/// </summary>
 public class ArrayModelBinder : IModelBinder
 {
     public Task BindModelAsync(ModelBindingContext bindingContext)

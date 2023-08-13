@@ -5,7 +5,6 @@ using Application.Repositories;
 using Application.Services;
 using AutoMapper;
 using Domain.Entities;
-using Domain.Logging;
 
 namespace Persistence.Services;
 
@@ -14,19 +13,26 @@ namespace Persistence.Services;
 /// </summary>
 internal sealed class ProductService : IProductService
 {
+    #region fields
+
     private readonly IRepositoryManager _repository;
-    private readonly ILoggerManager _logger;
     private readonly IMapper _mapper;
 
+    #endregion fields
+
+    #region constructor
+
     public ProductService(
-        IRepositoryManager repository, 
-        ILoggerManager logger,
+        IRepositoryManager repository,
         IMapper mapper)
     {
         _repository = repository;
-        _logger = logger;
         _mapper = mapper;
     }
+
+    #endregion constructor
+
+    #region get methods
 
     /// <summary>
     /// Gets all products.
@@ -167,6 +173,10 @@ internal sealed class ProductService : IProductService
         return productsDtos;
     }
 
+    #endregion get methods
+
+    #region create/update/delete methods
+
     /// <summary>
     /// Creates a product for brand.
     /// </summary>
@@ -227,6 +237,10 @@ internal sealed class ProductService : IProductService
         _repository.ProductRepository.DeleteProduct(product);
         await _repository.SaveAsync();
     }
+
+    #endregion create/update/delete methods
+
+    #region private methods
 
     /// <summary>
     /// Checks if the brand exists.
@@ -291,4 +305,6 @@ internal sealed class ProductService : IProductService
 
         return product;
     }
+
+    #endregion private methods
 }

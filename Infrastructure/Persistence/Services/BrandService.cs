@@ -4,7 +4,6 @@ using Application.Repositories;
 using Application.Services;
 using AutoMapper;
 using Domain.Entities;
-using Domain.Logging;
 
 namespace Persistence.Services;
 
@@ -14,21 +13,19 @@ namespace Persistence.Services;
 internal sealed class BrandService : IBrandService
 {
     private readonly IRepositoryManager _repository;
-    private readonly ILoggerManager _logger;
     private readonly IMapper _mapper;
 
-#region constructor
-    public BrandService(
-        IRepositoryManager repository, 
-        ILoggerManager logger,
-        IMapper mapper)
+    #region constructor
+
+    public BrandService(IRepositoryManager repository, IMapper mapper)
     {
         _repository = repository;
-        _logger = logger;
         _mapper = mapper;
     }
 
-#endregion constructor
+    #endregion constructor
+
+    #region get methods
 
     /// <summary>
     /// Gets all brands.
@@ -85,6 +82,10 @@ internal sealed class BrandService : IBrandService
 
         return brandsDto;
     }
+
+    #endregion get methods
+
+    #region create/update/delete methods
 
     /// <summary>
     /// Creates a brand.
@@ -166,6 +167,10 @@ internal sealed class BrandService : IBrandService
         await _repository.SaveAsync();
     }
 
+    #endregion create/update/delete methods
+
+    #region private methods
+
     /// <summary>
     /// Gets a company and checks if it exits.
     /// </summary>
@@ -183,4 +188,6 @@ internal sealed class BrandService : IBrandService
         
         return brand;
     }
+
+    #endregion private methods
 }

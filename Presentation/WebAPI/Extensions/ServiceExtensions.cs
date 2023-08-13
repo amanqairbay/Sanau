@@ -1,8 +1,13 @@
 using System.Reflection;
+using System.Text;
 using Application.Repositories;
 using Application.Services;
+using Domain.Entities.Identity;
 using Domain.Logging;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using Persistence.Context;
 using Persistence.Logging;
 using Persistence.Repositories;
@@ -30,9 +35,11 @@ public static class ServiceExtensions
                 .WithExposedHeaders("X-Pagination"));
         });
 
-    // If we want to host our application on IIS, 
-    // we need to configure an IIS integration 
-    // which will eventually help us with the deployment to IIS.
+    /* 
+        If we want to host our application on IIS, 
+        we need to configure an IIS integration 
+        which will eventually help us with the deployment to IIS.
+    */
     public static void AddConfigureIISIntegration(this IServiceCollection services) => 
         services.Configure<IISOptions>(options => {});
     
@@ -46,29 +53,78 @@ public static class ServiceExtensions
         services.AddScoped<IServiceManager, ServiceManager>();
     
     public static void AddConfigureSqlContext(this IServiceCollection services, IConfiguration configuration) =>
-        services.AddSqlServer<DataContext>((configuration.GetConnectionString("sqlConnection")));
+        services.AddSqlServer<DataContext>(configuration.GetConnectionString("SqlConnection"));
+
+    public static void AddConfigureIdentityDbContext(this IServiceCollection services, IConfiguration configuration) =>
+        services.AddSqlServer<AppIdentityDbContext>(configuration.GetConnectionString("IdentityConnection"));
+
+    public static void AddConfigureAuthentication(this IServiceCollection services) =>
+        services.AddAuthentication();
+
+    public static void AddConfigureIdentity(this IServiceCollection services)
+    {
+        var builder = services.AddIdentity<AppUser, IdentityRole>(o =>
+        {
+            o.Password.RequireDigit = true;
+            o.Password.RequireLowercase = false;
+            o.Password.RequireUppercase = false;
+            o.Password.RequireNonAlphanumeric = false;
+            o.Password.RequiredLength = 8;
+            o.User.RequireUniqueEmail = true;
+        })
+        .AddEntityFrameworkStores<AppIdentityDbContext>()
+        .AddDefaultTokenProviders();
+    }
 
     public static void AddConfigureRedis(this IServiceCollection services, IConfiguration configuration) =>
         services.AddSingleton<IConnectionMultiplexer>(c =>
         {
-            var options = ConfigurationOptions.Parse(configuration.GetConnectionString("Redis")!);
-            return ConnectionMultiplexer.Connect(options);
+            var configurationOptions = ConfigurationOptions.Parse(configuration.GetConnectionString("Redis")!);
+            return ConnectionMultiplexer.Connect(configurationOptions);
         });
 
     public static void AddConfigureAutoMapper(this IServiceCollection services) => 
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
     public static void AddConfigureApiBehaviorOptions(this IServiceCollection services) => 
-        services.Configure<ApiBehaviorOptions>(options => { options.SuppressModelStateInvalidFilter = true; });
+        services.Configure<ApiBehaviorOptions>(options =>
+        {
+            options.SuppressModelStateInvalidFilter = true;
+        });
 
     public static void AddConfigureValidationFilterAttribute(this IServiceCollection services) => 
         services.AddScoped<ValidationFilterAttribute>();
 
-    public static void AddConfigureControllers(this IServiceCollection services) => 
-        services.AddControllers(config =>
+    public static void AddConfigureJWT(this IServiceCollection services, IConfiguration configuration)
+    {
+        var jwtSettings = configuration.GetSection("JwtSettings");
+        var secretKey = jwtSettings["secretKey"];
+
+        services.AddAuthentication(opt =>
         {
-            config.RespectBrowserAcceptHeader = true;
-            config.ReturnHttpNotAcceptable = true;
+            opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(options =>
+        {
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = jwtSettings["validIssuer"],
+                ValidAudience = jwtSettings["validAudience"],
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey!))
+            };
+        });
+    }
+
+    public static void AddConfigureControllers(this IServiceCollection services) => 
+        services.AddControllers(options =>
+        {
+            options.RespectBrowserAcceptHeader = true;
+            options.ReturnHttpNotAcceptable = true;
         })
         .AddXmlDataContractSerializerFormatters();
 }

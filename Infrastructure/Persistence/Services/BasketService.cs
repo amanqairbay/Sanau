@@ -7,7 +7,7 @@ namespace Persistence.Services;
 /// <summary>
 /// Represents a basket service.
 /// </summary>
-public class BasketService : IBasketService
+internal sealed class BasketService : IBasketService
 {
     private readonly IRepositoryManager _repository;
 

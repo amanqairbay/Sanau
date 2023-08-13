@@ -2,6 +2,7 @@ using Application.Common.DTOs;
 using Application.Common.Helpers;
 using AutoMapper;
 using Domain.Entities;
+using Domain.Entities.Identity;
 
 namespace Application.Common;
 
@@ -26,6 +27,8 @@ public class MappingProfile : Profile
 
         CreateMap<ProductForUpdateDto, Product>();
         CreateMap<BrandForUpdateDto, Brand>();
+
+        CreateMap<UserForRegistrationDto, AppUser>();
 #nullable disable
     }
 }

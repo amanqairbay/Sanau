@@ -6,6 +6,11 @@ namespace Application.Services;
 public interface IServiceManager
 {
     /// <summary>
+    /// Gets an authentication service.
+    /// </summary>
+    IAuthenticationService AuthenticationService { get; }
+
+    /// <summary>
     /// Gets a brand service.
     /// </summary>
     IBrandService BrandService { get; }

@@ -9,6 +9,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.10" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,9 +21,11 @@
     <Folder Include="wwwroot\" />
     <Folder Include="wwwroot\images\brands\logo\" />
     <Folder Include="wwwroot\images\brands\products\" />
+    <Folder Include="ContextFactory\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\.editorconfig" />
+    <None Remove="..\..\.editorconfig" />
+    <None Remove="ContextFactory\" />
   </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>

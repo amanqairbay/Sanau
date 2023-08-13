@@ -1,6 +1,7 @@
 using System.Text.Json;
 using Application.Common.RequestFeatures;
 using Application.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers;
@@ -14,7 +15,7 @@ public class ProductsController : BaseApiController
         _service = service;
     }
 
-#region GET methods
+    #region GET methods
 
     [HttpGet]
     public async Task<IActionResult> GetAllPagedProducts([FromQuery] ProductParameters productParameters)
@@ -27,11 +28,12 @@ public class ProductsController : BaseApiController
     }
 
     [HttpGet("all")]
+    [Authorize(Roles ="Administrator")]
     public async Task<IActionResult> GetAllProducts()
     {
         var products = await _service.ProductService.GetProductsAsync(trackChanges: false);
         return Ok(products);
     }
 
-#endregion GET methods
+    #endregion GET methods
 }

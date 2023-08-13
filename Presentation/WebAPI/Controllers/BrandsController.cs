@@ -17,7 +17,7 @@ public class BrandsController : BaseApiController
         _service = service;
     }
 
-#region GET methods
+    #region get methods
 
     [HttpGet]
     public async Task<IActionResult> GetAllBrands()
@@ -63,9 +63,9 @@ public class BrandsController : BaseApiController
         return Ok(product);
     }
 
-#endregion GET methods
+    #endregion get methods
 
-#region POST methods
+    #region post methods
 
     [HttpPost]
     [ServiceFilter(typeof(ValidationFilterAttribute))]
@@ -94,9 +94,9 @@ public class BrandsController : BaseApiController
         return CreatedAtRoute("GetBrandProduct", new { id, productId = createdProduct.Id }, createdProduct);
     }
 
-#endregion POST methods
+    #endregion post methods
 
-#region PUT methods
+    #region put methods
 
     [HttpPut("{id:guid}")]
     [ServiceFilter(typeof(ValidationFilterAttribute))]
@@ -117,9 +117,9 @@ public class BrandsController : BaseApiController
         return NoContent();
     }
 
-#endregion PUT methods
+    #endregion put methods
 
-#region DELETE methods
+    #region delete methods
 
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteBrand(Guid id)
@@ -137,5 +137,5 @@ public class BrandsController : BaseApiController
         return NoContent();
     }
 
-#endregion DELETE methods
+    #endregion delete methods
 }

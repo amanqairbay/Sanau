@@ -1,9 +1,6 @@
 ﻿using System.Linq.Dynamic.Core;
-using System.Reflection;
-using System.Text;
 using Domain.Entities;
 using Persistence.Repositories.Extensions.Utility;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Persistence.Repositories.Extensions;
 

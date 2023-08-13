@@ -14,10 +14,6 @@ public class BasketRepository : IBasketRepository
         _database = redis.GetDatabase();
     }
 
-    public BasketRepository()
-    {
-    }
-
     /// <summary>
     /// Gets the customer basket.
     /// </summary>

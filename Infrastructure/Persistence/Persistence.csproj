@@ -13,15 +13,24 @@
     </PackageReference>
     <PackageReference Include="NLog" Version="5.2.3" />
     <PackageReference Include="StackExchange.Redis" Version="2.6.122" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.32.1" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.32.1" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="Repositories\Extensions\" />
     <None Remove="Repositories\Extensions\Utility\" />
+    <None Remove="Identity\" />
+    <None Remove="Identity\Configuration\" />
+    <None Remove="SeedData\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Repositories\Extensions\" />
     <Folder Include="Repositories\Extensions\Utility\" />
+    <Folder Include="Identity\" />
+    <Folder Include="Identity\Configuration\" />
+    <Folder Include="SeedData\" />
   </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>

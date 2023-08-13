@@ -1,5 +1,4 @@
 using NLog;
-using WebAPI.ActionFilters;
 
 namespace WebAPI.Extensions;
 
@@ -23,11 +22,14 @@ public static class RegisterStartupServicesExtensions
         builder.Services.AddConfigureRepositoryManager();
         builder.Services.AddConfigureServiceManager();
         builder.Services.AddConfigureSqlContext(configuration);
+        builder.Services.AddConfigureIdentityDbContext(configuration);
+        builder.Services.AddConfigureAuthentication();
+        builder.Services.AddConfigureIdentity();
         builder.Services.AddConfigureRedis(configuration);
         builder.Services.AddConfigureAutoMapper();
         builder.Services.AddConfigureApiBehaviorOptions();
         builder.Services.AddConfigureValidationFilterAttribute();
-        
+        builder.Services.AddConfigureJWT(configuration);
         builder.Services.AddConfigureControllers();
         builder.Services.AddEndpointsApiExplorer();
         

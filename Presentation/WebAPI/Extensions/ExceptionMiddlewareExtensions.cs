@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Diagnostics;
 
 namespace WebAPI.Extensions;
 
+/// <summary>
+/// Represents an exception middleware extensions.
+/// </summary>
 public static class ExceptionMiddlewareExtensions
 {
     public static void ConfigureExceptionHandler(this WebApplication app, ILoggerManager logger)
