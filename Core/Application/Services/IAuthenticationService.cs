@@ -33,9 +33,20 @@ public interface IAuthenticationService
     /// Creates a token. It does this by collecting information from private methods
     /// and serializing token parameters.
     /// </summary>
+    /// <param name="populateExp">Populate expiry.</param>
     /// <returns>
     /// A task that represents the asynchronous operation.
     /// The task result contains the token in 'Compact Serialazation Format'.
     /// </returns>
-    Task<string> CreateToken();
+    Task<TokenDto> CreateToken(bool populateExp);
+
+    /// <summary>
+    /// Refreshes a token
+    /// </summary>
+    /// <param name="tokenDto">Token data transfer object.</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation.
+    /// The task result contains the token in 'Compact Serialazation Format'.
+    /// </returns>
+    Task<TokenDto> RefreshToken(TokenDto tokenDto);
 }

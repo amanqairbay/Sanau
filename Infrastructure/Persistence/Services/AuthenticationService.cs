@@ -1,7 +1,9 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using Application.Common.DTOs;
+using Application.Common.Exceptions;
 using Application.Services;
 using AutoMapper;
 using Domain.Entities.Identity;
@@ -82,17 +84,56 @@ internal sealed class AuthenticationService : IAuthenticationService
     /// Creates a token. It does this by collecting information from private methods
     /// and serializing token parameters.
     /// </summary>
+    /// <param name="populateExp">Populate expiry.</param>
     /// <returns>
     /// A task that represents the asynchronous operation.
     /// The task result contains the token in 'Compact Serialazation Format'.
     /// </returns>
-    public async Task<string> CreateToken()
+    public async Task<TokenDto> CreateToken(bool populateExp)
     {
+        /*
+            Generates an update token and expiry date for the logged-in user,
+            and also returns both an access token
+            and an update token to the caller.
+         */
         var signingCredentials = GetSigningCredentials();
         var claims = await GetClaims();
         var tokenOptions = GenerateTokenOptions(signingCredentials, claims);
 
-        return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+        var refreshToken = GenerateRefreshToken();
+
+        _user!.RefreshToken = refreshToken;
+
+        if (populateExp)
+            _user.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
+
+        await _userManager.UpdateAsync(_user);
+
+        var accessToken = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+
+        return new TokenDto(accessToken, refreshToken);
+    }
+
+    /// <summary>
+    /// Refreshes a token
+    /// </summary>
+    /// <param name="tokenDto">Token data transfer object.</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation.
+    /// The task result contains the token in 'Compact Serialazation Format'.
+    /// </returns>
+    public async Task<TokenDto> RefreshToken(TokenDto tokenDto)
+    {
+        var principal = GetPrincipalFromExpiredToken(tokenDto.AccessToken);
+
+        var user = await _userManager.FindByNameAsync(principal.Identity!.Name!);
+
+        if (user == null || user.RefreshToken != tokenDto.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
+            throw new RefreshTokenBadRequest();
+
+        _user = user;
+
+        return await CreateToken(populateExp: false);
     }
 
     #region private helper methods for CreateToken()
@@ -160,6 +201,72 @@ internal sealed class AuthenticationService : IAuthenticationService
         );
 
         return tokenOptions;
+    }
+
+    /// <summary>
+    /// Generates the refresh token.
+    /// </summary>
+    /// <returns>
+    /// Returns a a cryptographic random number for refresh token.
+    /// </returns>
+    private string GenerateRefreshToken()
+    {
+        /*
+            The method contains the logic to generate the refresh token.
+            We use the RandomNumberGenerator class to generate a cryptographic random number for this purpose.
+         */
+
+        var randomNumber = new byte[32];
+
+        using var rng = RandomNumberGenerator.Create();
+        rng.GetBytes(randomNumber);
+
+        return Convert.ToBase64String(randomNumber);
+    }
+
+    /// <summary>
+    /// Gets the user principal from the expired access token.
+    /// </summary>
+    /// <param name="token">Token.</param>
+    /// <returns>Returns the ClaimsPrincipal object.</returns>
+    private ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
+    {
+        /*
+            The method is used to get the user principal from the expired access token.
+            We make use of the ValidateToken method from the JwtSecurityTokenHandler class for this purpose.
+            This method validates the token and returns the ClaimsPrincipal object.
+         */
+
+        var jwtSettings = _configuration.GetSection("JwtSettings");
+        var secretKey = jwtSettings["secretKey"];
+
+        var tokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateAudience = true,
+            ValidateIssuer = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey!)),
+            ValidateLifetime = true,
+            ValidIssuer = jwtSettings["validIssuer"],
+            ValidAudience = jwtSettings["validAudience"]
+        };
+
+        var tokenHandler = new JwtSecurityTokenHandler();
+
+        SecurityToken securityToken;
+
+        var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
+
+
+        var jwtSecurityToken = securityToken as JwtSecurityToken;
+
+        if (jwtSecurityToken == null ||
+            !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+        {
+            throw new SecurityTokenException("Invalid token");
+        }
+
+        return principal;
     }
 
     #endregion private helper methods for CreateToken()
