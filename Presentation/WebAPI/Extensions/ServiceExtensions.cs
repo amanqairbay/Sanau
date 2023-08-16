@@ -1,7 +1,7 @@
-using System.Reflection;
 using System.Text;
 using Application.Repositories;
 using Application.Services;
+using Domain.Entities.ConfigurationModelsж;
 using Domain.Entities.Identity;
 using Domain.Logging;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -97,8 +97,10 @@ public static class ServiceExtensions
 
     public static void AddConfigureJWT(this IServiceCollection services, IConfiguration configuration)
     {
-        var jwtSettings = configuration.GetSection("JwtSettings");
-        var secretKey = jwtSettings["secretKey"];
+        var jwtConfiguration = new JwtConfiguration();
+        configuration.Bind(jwtConfiguration.Section, jwtConfiguration);
+
+        var secretKey = jwtConfiguration.SecretKey;
 
         services.AddAuthentication(opt =>
         {
@@ -113,12 +115,14 @@ public static class ServiceExtensions
                 ValidateAudience = true,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
-                ValidIssuer = jwtSettings["validIssuer"],
-                ValidAudience = jwtSettings["validAudience"],
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey!))
+                ValidIssuer = jwtConfiguration.ValidIssuer,
+                ValidAudience = jwtConfiguration.ValidAudience,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
             };
         });
     }
+
+    
 
     public static void AddConfigureControllers(this IServiceCollection services) => 
         services.AddControllers(options =>

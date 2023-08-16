@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WebAPI</name>
+    </assembly>
+    <members>
+        <member name="T:WebAPI.ActionFilters.ValidationFilterAttribute">
+            <summary>
+            Represents a filter attribute for validation.
+            </summary>
+        </member>
+        <member name="M:WebAPI.ActionFilters.ValidationFilterAttribute.OnActionExecuted(Microsoft.AspNetCore.Mvc.Filters.ActionExecutedContext)">
+            <summary>
+            Called after the action executes, before the action result.
+            </summary>
+            <param name="context">A context for action filters.</param>
+        </member>
+        <member name="M:WebAPI.ActionFilters.ValidationFilterAttribute.OnActionExecuting(Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext)">
+            <summary>
+            Called before the action executes, after model binding is complete.
+            </summary>
+            <param name="context">A context for action filters.</param>
+        </member>
+        <member name="T:WebAPI.ContextFactory.DataContextFactory">
+            <summary>
+            This class will help this application create a derived DbContext instance during 
+            the design time which will help us with our migrations
+            </summary>
+        </member>
+        <member name="M:WebAPI.ContextFactory.DataContextFactory.CreateDbContext(System.String[])">
+            <summary>
+            Creates the database context.
+            </summary>
+            <param name="args">Arguments</param>
+            <returns>
+            Returns a new instance of the repository context class with the provided parameters.
+            </returns>
+        </member>
+        <member name="T:WebAPI.ContextFactory.IdentityContextFactory">
+            <summary>
+            This class will help this application create a derived DbContext instance during 
+            the design time which will help us with our migrations
+            </summary>
+        </member>
+        <member name="M:WebAPI.ContextFactory.IdentityContextFactory.CreateDbContext(System.String[])">
+            <summary>
+            Creates the database context.
+            </summary>
+            <param name="args">Arguments</param>
+            <returns>
+            Returns a new instance of the repository context class with the provided parameters.
+            </returns>
+        </member>
+        <member name="T:WebAPI.Extensions.ExceptionMiddlewareExtensions">
+            <summary>
+            Represents an exception middleware extensions.
+            </summary>
+        </member>
+        <member name="T:WebAPI.Extensions.RegisterStartupMiddlewaresExtensions">
+            <summary>
+            Represents the startup middlewares register.
+            </summary>
+        </member>
+        <member name="M:WebAPI.Extensions.RegisterStartupMiddlewaresExtensions.SetupMiddleware(Microsoft.AspNetCore.Builder.WebApplication)">
+            <summary>
+            Configures middleware.
+            </summary>
+            <param name="app">The web application used to configure the HTTP pipeline, and routes.</param>
+            <returns>
+            Returns a configured WebApplication.
+            </returns>
+        </member>
+        <member name="M:WebAPI.Extensions.RegisterStartupServicesExtensions.RegisterServices(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
+            <summary>
+            Registers services.
+            </summary>
+            <param name="builder">A builder for web applications and services.</param>
+            <returns>
+            Returns a configured WebApplicationBuilder.
+            </returns>
+        </member>
+        <member name="T:WebAPI.Extensions.ServiceExtensions">
+            <summary>
+            Represents the service extensions.
+            </summary>
+        </member>
+        <member name="M:WebAPI.Extensions.ServiceExtensions.AddConfigureCors(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            CORS (Cross-Origin Resource Sharing) is a mechanism to give or restrict access rights to applications from different domains.
+            </summary>
+            <param name="services">The Microsoft.Extensions.DependencyInjection.IServiceCollection to add services to.</param>
+        </member>
+        <member name="T:WebAPI.Extensions.SwaggerServiceExtensions">
+            <summary>
+            Represents a Swagger documentation.
+            </summary>
+        </member>
+        <member name="T:WebAPI.ModelBinders.ArrayModelBinder">
+            <summary>
+            Represents an array model binder.
+            </summary>
+        </member>
+    </members>
+</doc>

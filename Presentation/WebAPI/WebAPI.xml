@@ -1,0 +1,237 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WebAPI</name>
+    </assembly>
+    <members>
+        <member name="T:WebAPI.ActionFilters.ValidationFilterAttribute">
+            <summary>
+            Represents a filter attribute for validation.
+            </summary>
+        </member>
+        <member name="M:WebAPI.ActionFilters.ValidationFilterAttribute.OnActionExecuted(Microsoft.AspNetCore.Mvc.Filters.ActionExecutedContext)">
+            <summary>
+            Called after the action executes, before the action result.
+            </summary>
+            <param name="context">A context for action filters.</param>
+        </member>
+        <member name="M:WebAPI.ActionFilters.ValidationFilterAttribute.OnActionExecuting(Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext)">
+            <summary>
+            Called before the action executes, after model binding is complete.
+            </summary>
+            <param name="context">A context for action filters.</param>
+        </member>
+        <member name="T:WebAPI.ContextFactory.DataContextFactory">
+            <summary>
+            This class will help this application create a derived DbContext instance during 
+            the design time which will help us with our migrations
+            </summary>
+        </member>
+        <member name="M:WebAPI.ContextFactory.DataContextFactory.CreateDbContext(System.String[])">
+            <summary>
+            Creates the database context.
+            </summary>
+            <param name="args">Arguments</param>
+            <returns>
+            Returns a new instance of the repository context class with the provided parameters.
+            </returns>
+        </member>
+        <member name="T:WebAPI.ContextFactory.IdentityContextFactory">
+            <summary>
+            This class will help this application create a derived DbContext instance during 
+            the design time which will help us with our migrations
+            </summary>
+        </member>
+        <member name="M:WebAPI.ContextFactory.IdentityContextFactory.CreateDbContext(System.String[])">
+            <summary>
+            Creates the database context.
+            </summary>
+            <param name="args">Arguments</param>
+            <returns>
+            Returns a new instance of the repository context class with the provided parameters.
+            </returns>
+        </member>
+        <member name="M:WebAPI.Controllers.BrandsController.GetAllBrands">
+            <summary>
+            Gets and returns a list of all brands.
+            </summary>
+            <returns>
+            A task that represents the asynchronous operation, containing the list of all brands.
+            </returns>
+        </member>
+        <member name="M:WebAPI.Controllers.BrandsController.GetBrand(System.Guid)">
+            <summary>
+            Gets brand by brand identifier.
+            </summary>
+            <param name="id">Brand identifier.</param>
+            <returns>
+            A task that represents the asynchronous operation
+            The task result contains the brand.
+            </returns>
+            <response code="200">If the brand exists.</response>
+            <response code="404">If the brand doesn't exist.</response>
+        </member>
+        <member name="M:WebAPI.Controllers.BrandsController.GetBrandsByIds(System.Collections.Generic.IEnumerable{System.Guid})">
+            <summary>
+            Gets brands by brand identifiers.
+            </summary>
+            <param name="ids">Brand identifiers.</param>
+            <returns>
+            A task that represents the asynchronous operation
+            The task result contains the brand.
+            </returns>
+            <response code="200">If the brands exists.</response>
+            <response code="404">If the brands do not exist.</response>
+        </member>
+        <member name="M:WebAPI.Controllers.BrandsController.GetPagedBrandProducts(System.Guid,Application.Common.RequestFeatures.ProductParameters)">
+            <summary>
+            Gets paged products of a specific brand.
+            </summary>
+            <param name="id">Brand identifier.</param>
+            <param name="productParameters">Product parameters.</param>
+            <returns>
+            A task that represents the asynchronous operation
+            The task result contains the paged products of a specific brand.
+            </returns>
+            <response code="200">If the brand exists.</response>
+            <response code="400">If the products price range is invalid.</response>
+            <response code="404">If the brand doesn't exist.</response>
+        </member>
+        <member name="M:WebAPI.Controllers.BrandsController.GetBrandProduct(System.Guid,System.Guid)">
+            <summary>
+            Gets the product of a specific brand.
+            </summary>
+            <param name="id">Brand identifier.</param>
+            <param name="productId">Product identifier.</param>
+            <returns>
+            A task that represents the asynchronous operation
+            The task result contains the product of a specific brand.
+            </returns>
+            <response code="200">If the brand exists.</response>
+            <response code="400">If the product's price range is invalid.</response>
+            <response code="404">If the brand doesn't exist.</response>
+        </member>
+        <member name="M:WebAPI.Controllers.BrandsController.CreateBrand(Application.Common.DTOs.BrandForCreationDto)">
+            <summary>
+            Creates the brand.
+            </summary>
+            <param name="brandForCreationDto">Data transfer object for brand creation.</param>
+            <returns>
+            A task that represents the asynchronous operation
+            The task result contains the newly created brand.
+            </returns>
+            <response code="201">If the brand is created.</response>
+            <response code="400">If the brand is null.</response>
+            <response code="422">If the brand is invalid.</response>
+        </member>
+        <member name="M:WebAPI.Controllers.BrandsController.CreateBrandCollection(System.Collections.Generic.IEnumerable{Application.Common.DTOs.BrandForCreationDto})">
+            <summary>
+            Creates the brands.
+            </summary>
+            <param name="brandForCreationDtos">Data transfers object for brand creation.</param>
+            <returns>
+            A task that represents the asynchronous operation
+            The task result contains the newly created brand.
+            </returns>
+            <response code="201">If the brands are created.</response>
+            <response code="400">If the brands are null.</response>
+            <response code="401">If the user is not authorized.</response>
+            <response code="422">If the brands are invalid.</response>
+        </member>
+        <member name="M:WebAPI.Controllers.BrandsController.CreateProductForBrand(System.Guid,Application.Common.DTOs.ProductForCreationDto)">
+            <summary>
+            Creates the product of a specific brand.
+            </summary>
+            <param name="id">Brand identifier.</param>
+            <param name="productForCreationDto">Data transfer object for product creation.</param>
+            <returns>
+            A task that represents the asynchronous operation
+            The task result contains the newly created product for a specific brand.
+            </returns>
+            <response code="201">If the product is created.</response>
+            <response code="401">If the user is not authorized.</response>
+            <response code="404">If the brand doesn't exeist.</response>
+            <response code="422">If the product is invalid.</response>
+        </member>
+        <member name="M:WebAPI.Controllers.BrandsController.UpdateBrand(System.Guid,Application.Common.DTOs.BrandForUpdateDto)">
+             <summary>
+             Updates the brand.
+             </summary>
+             <param name="id">Brand identifier.</param>
+             <param name="brandForUpdateDto">Data transfer object for brand update.</param>
+             <returns>
+            A task that represents the asynchronous operation.
+             </returns>
+             <response code="204">If the brand is updated.</response>
+             <response code="401">If the user is not authorized.</response>
+             <response code="404">If the brand doesn't exeist.</response>
+             <response code="422">If the brand is invalid.</response>
+        </member>
+        <member name="M:WebAPI.Controllers.ProductsController.GetAllPagedProducts(Application.Common.RequestFeatures.ProductParameters)">
+            <summary>
+            Gets and returns a list of products by parameters.
+            </summary>
+            <param name="productParameters">The product params to get for.</param>
+            <returns>
+            A task that represents the asynchronous operation, containing the list of products.
+            </returns>
+        </member>
+        <member name="M:WebAPI.Controllers.ProductsController.GetAllProducts">
+            <summary>
+            Gets and returns a list of all products.
+            </summary>
+            <returns>
+            A task that represents the asynchronous operation, containing the list of all products.
+            </returns>
+        </member>
+        <member name="T:WebAPI.Extensions.ExceptionMiddlewareExtensions">
+            <summary>
+            Represents an exception middleware extensions.
+            </summary>
+        </member>
+        <member name="T:WebAPI.Extensions.RegisterStartupMiddlewaresExtensions">
+            <summary>
+            Represents the startup middlewares register.
+            </summary>
+        </member>
+        <member name="M:WebAPI.Extensions.RegisterStartupMiddlewaresExtensions.SetupMiddleware(Microsoft.AspNetCore.Builder.WebApplication)">
+            <summary>
+            Configures middleware.
+            </summary>
+            <param name="app">The web application used to configure the HTTP pipeline, and routes.</param>
+            <returns>
+            Returns a configured WebApplication.
+            </returns>
+        </member>
+        <member name="M:WebAPI.Extensions.RegisterStartupServicesExtensions.RegisterServices(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
+            <summary>
+            Registers services.
+            </summary>
+            <param name="builder">A builder for web applications and services.</param>
+            <returns>
+            Returns a configured WebApplicationBuilder.
+            </returns>
+        </member>
+        <member name="T:WebAPI.Extensions.ServiceExtensions">
+            <summary>
+            Represents the service extensions.
+            </summary>
+        </member>
+        <member name="M:WebAPI.Extensions.ServiceExtensions.AddConfigureCors(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            CORS (Cross-Origin Resource Sharing) is a mechanism to give or restrict access rights to applications from different domains.
+            </summary>
+            <param name="services">The Microsoft.Extensions.DependencyInjection.IServiceCollection to add services to.</param>
+        </member>
+        <member name="T:WebAPI.Extensions.SwaggerServiceExtensions">
+            <summary>
+            Represents a Swagger documentation.
+            </summary>
+        </member>
+        <member name="T:WebAPI.ModelBinders.ArrayModelBinder">
+            <summary>
+            Represents an array model binder.
+            </summary>
+        </member>
+    </members>
+</doc>

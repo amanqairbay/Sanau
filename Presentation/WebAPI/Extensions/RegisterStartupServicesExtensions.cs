@@ -30,6 +30,7 @@ public static class RegisterStartupServicesExtensions
         builder.Services.AddConfigureApiBehaviorOptions();
         builder.Services.AddConfigureValidationFilterAttribute();
         builder.Services.AddConfigureJWT(configuration);
+        builder.Services.AddConfigureSwagger();
         builder.Services.AddConfigureControllers();
         builder.Services.AddEndpointsApiExplorer();
         

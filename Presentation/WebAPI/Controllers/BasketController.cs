@@ -13,6 +13,14 @@ public class BasketController : BaseApiController
         _service = service;
     }
 
+    /// <summary>
+    /// Gets a basket.
+    /// </summary>
+    /// <param name="id">Basket identifier.</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation
+    /// The task result contains the basket.
+    /// </returns>
     [HttpGet]
     public async Task<IActionResult> GetBasket(string id)
     {
@@ -21,6 +29,14 @@ public class BasketController : BaseApiController
         return Ok(basket);
     }
 
+    /// <summary>
+    /// Updates a basket.
+    /// </summary>
+    /// <param name="basket">Basket.</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation
+    /// The task result contains the updated basket.
+    /// </returns>
     [HttpPost]
     public async Task<IActionResult> UpdateBasketAsync(CustomerBasket basket)
     {
@@ -29,6 +45,11 @@ public class BasketController : BaseApiController
         return Ok(updatedBasket);
     }
 
+    /// <summary>
+    /// Deletes a basket.
+    /// </summary>
+    /// <param name="id">Basket identifier.</param>
+    /// <returns>A task that represents the asynchronous operation</returns>
     [HttpDelete]
     public async Task DeleteBasketAsync(string id)
     {

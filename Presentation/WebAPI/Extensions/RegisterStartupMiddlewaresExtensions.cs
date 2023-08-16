@@ -37,6 +37,7 @@ public static class RegisterStartupMiddlewaresExtensions
         app.UseCors("CorsPolicy");
         app.UseAuthentication();
         app.UseAuthorization();
+        app.UseConfigureSwagger();
         app.MapControllers();
         app.MigrateDatabase();
         
