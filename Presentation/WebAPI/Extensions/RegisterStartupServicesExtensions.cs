@@ -15,6 +15,12 @@ public static class RegisterStartupServicesExtensions
     {
         LogManager.Setup().LoadConfigurationFromFile(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
         var configuration = builder.Configuration;
+
+        builder.WebHost.UseKestrel(options =>
+        {
+            // Deletes the Server header for security.
+            options.AddServerHeader = false;
+        });
         
         builder.Services.AddConfigureCors();
         builder.Services.AddConfigureIISIntegration();
@@ -32,6 +38,7 @@ public static class RegisterStartupServicesExtensions
         builder.Services.AddConfigureJWT(configuration);
         builder.Services.AddConfigureSwagger();
         builder.Services.AddConfigureControllers();
+        builder.Services.AddHttpContextAccessor();
         builder.Services.AddEndpointsApiExplorer();
         
         return builder;

@@ -9,7 +9,9 @@ using AutoMapper;
 using Domain.Entities.ConfigurationModelsж;
 using Domain.Entities.Identity;
 using Domain.Logging;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
@@ -22,6 +24,7 @@ internal sealed class AuthenticationService : IAuthenticationService
     private readonly UserManager<AppUser> _userManager;
     private readonly IConfiguration _configuration;
     private readonly JwtConfiguration _jwtConfiguration;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
     private AppUser? _user;
 
@@ -29,11 +32,13 @@ internal sealed class AuthenticationService : IAuthenticationService
         ILoggerManager logger,
         IMapper mapper,
         UserManager<AppUser> userManager,
+        IHttpContextAccessor httpContextAccessor,
         IConfiguration configuration)
     {
         _logger = logger;
         _mapper = mapper;
         _userManager = userManager;
+        _httpContextAccessor = httpContextAccessor;
         _configuration = configuration;
         _jwtConfiguration = new JwtConfiguration();
         _configuration.Bind(_jwtConfiguration.Section, _jwtConfiguration);
@@ -74,7 +79,7 @@ internal sealed class AuthenticationService : IAuthenticationService
             and CheckPasswordAsync to check the user's password for compliance with the hashed password from the database. 
          */
 
-        _user = await _userManager.FindByNameAsync(userForAuth.UserName);
+        _user = await _userManager.FindByEmailAsync(userForAuth.Email);
 
         var result = (_user != null && await _userManager.CheckPasswordAsync(_user, userForAuth.Password));
 
@@ -119,7 +124,7 @@ internal sealed class AuthenticationService : IAuthenticationService
     }
 
     /// <summary>
-    /// Refreshes a token
+    /// Refreshes a token.
     /// </summary>
     /// <param name="tokenDto">Token data transfer object.</param>
     /// <returns>
@@ -139,6 +144,90 @@ internal sealed class AuthenticationService : IAuthenticationService
 
         return await CreateToken(populateExp: false);
     }
+
+    /// <summary>
+    /// Gets the current user.
+    /// </summary>
+    /// <returns>
+    /// A task that represents the asynchronous operation.
+    /// The task result contains the current user.
+    /// </returns>
+    public async Task<UserDto> GetCurrentUserAsync()
+    {
+        var email = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Email);
+
+        _user = await _userManager.Users.SingleOrDefaultAsync(x => x.Email == email);
+
+        var token = await CreateToken(populateExp: true);
+
+        return new UserDto
+        {
+            Email = _user!.Email!,
+            Username = _user!.UserName!,
+            AccessToken = token.AccessToken,
+            RefreshToken = token.RefreshToken
+        };
+    }
+
+    /// <summary>
+    /// Gets the user's address.
+    /// </summary>
+    /// <returns>
+    /// A task that represents the asynchronous operation.
+    /// The task result contains the user's address.
+    /// </returns>
+    public async Task<AddressDto> GetUserAddressAsync()
+    {
+        var email = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Email);
+
+        _user = await _userManager.Users
+            .Include(x => x.Address)
+            .SingleOrDefaultAsync(x => x.Email == email);
+
+        var addressDto = _mapper.Map<Address, AddressDto>(_user!.Address);
+
+        return addressDto;
+    }
+
+    /// <summary>
+    /// Updates the user.
+    /// </summary>
+    /// <param name="addressDto">Data transfer object for address.</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation.
+    /// The task result contains the updated user.
+    /// </returns>
+    /// <exception cref="UpdateUserAddressBadRequest">If the update result is not successful.</exception>
+    public async Task<AddressDto> UpdateUserAddressAsync(AddressDto addressDto)
+    {
+        var email = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Email);
+
+        _user = await _userManager.Users
+            .Include(x => x.Address)
+            .SingleOrDefaultAsync(x => x.Email == email);
+
+        _user!.Address = _mapper.Map<AddressDto, Address>(addressDto);
+
+        var result = await _userManager.UpdateAsync(_user);
+
+        if (!result.Succeeded)
+            throw new UpdateUserAddressBadRequest();
+
+
+        var addressToReturn = _mapper.Map<Address, AddressDto>(_user.Address);
+
+        return addressToReturn;
+    }
+
+    /// <summary>
+    /// Checks if email exists.
+    /// </summary>
+    /// <param name="email">A user's email.</param>
+    /// <returns>A task that represents the asynchronous operation.</returns>
+    public async Task<bool> CheckEmailExistsAsync(string email)
+    {
+        return await _userManager.FindByEmailAsync(email) != null;
+    }       
 
     #region private helper methods for CreateToken()
 
@@ -166,7 +255,7 @@ internal sealed class AuthenticationService : IAuthenticationService
     {
         var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.Name, _user!.UserName!)
+            new Claim(ClaimTypes.Email, _user!.Email!)
         };
 
         var roles = await _userManager.GetRolesAsync(_user);

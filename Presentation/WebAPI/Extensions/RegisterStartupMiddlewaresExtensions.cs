@@ -20,6 +20,8 @@ public static class RegisterStartupMiddlewaresExtensions
         var logger = app.Services.GetRequiredService<ILoggerManager>();
         app.ConfigureExceptionHandler(logger);
 
+        
+
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {

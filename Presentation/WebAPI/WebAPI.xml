@@ -51,6 +51,73 @@
             Returns a new instance of the repository context class with the provided parameters.
             </returns>
         </member>
+        <member name="M:WebAPI.Controllers.AuthenticationController.RegisterUser(Application.Common.DTOs.UserForRegistrationDto)">
+            <summary>
+            Registers a new user.
+            </summary>
+            <param name="userForRegistration">Data transfer object for register a new user.</param>
+            <returns>A task that represents the asynchronous operation.</returns>
+            <response code="201">If registration result is successful.</response>
+            <response code="400">If registration result is not successful.</response>
+        </member>
+        <member name="M:WebAPI.Controllers.AuthenticationController.Authenticate(Application.Common.DTOs.UserForAuthenticationDto)">
+            <summary>
+            Log in.
+            </summary>
+            <param name="userForAuthenticationDto">Data transfer object for user authentication.</param>
+            <returns>A task that represents the asynchronous operation.</returns>
+            <response code="200">If the user is logged in.</response>
+            <response code="401">If the user is not authorized.</response>
+        </member>
+        <member name="M:WebAPI.Controllers.AuthenticationController.GetCurrentUser">
+            <summary>
+            Gets current user.
+            </summary>
+            <returns>
+            A task that represents the asynchronous operation.
+            The task result contains current user.
+            </returns>
+            <response code="200">If the user is exist.</response>
+            <response code="401">If the user is not authorized.</response>
+        </member>
+        <member name="M:WebAPI.Controllers.AuthenticationController.GetUserAddress">
+            <summary>
+            Gets the user's address.
+            </summary>
+            <returns>
+            A task that represents the asynchronous operation.
+            The task result contains the user's address.
+            </returns>
+            <response code="200">If the user's address is exist.</response>
+            <response code="401">If the user is not authorized.</response>
+        </member>
+        <member name="M:WebAPI.Controllers.BasketController.GetBasket(System.String)">
+            <summary>
+            Gets a basket.
+            </summary>
+            <param name="id">Basket identifier.</param>
+            <returns>
+            A task that represents the asynchronous operation
+            The task result contains the basket.
+            </returns>
+        </member>
+        <member name="M:WebAPI.Controllers.BasketController.UpdateBasketAsync(Domain.Entities.CustomerBasket)">
+            <summary>
+            Updates a basket.
+            </summary>
+            <param name="basket">Basket.</param>
+            <returns>
+            A task that represents the asynchronous operation
+            The task result contains the updated basket.
+            </returns>
+        </member>
+        <member name="M:WebAPI.Controllers.BasketController.DeleteBasketAsync(System.String)">
+            <summary>
+            Deletes a basket.
+            </summary>
+            <param name="id">Basket identifier.</param>
+            <returns>A task that represents the asynchronous operation</returns>
+        </member>
         <member name="M:WebAPI.Controllers.BrandsController.GetAllBrands">
             <summary>
             Gets and returns a list of all brands.
@@ -65,7 +132,7 @@
             </summary>
             <param name="id">Brand identifier.</param>
             <returns>
-            A task that represents the asynchronous operation
+            A task that represents the asynchronous operation.
             The task result contains the brand.
             </returns>
             <response code="200">If the brand exists.</response>
@@ -77,7 +144,7 @@
             </summary>
             <param name="ids">Brand identifiers.</param>
             <returns>
-            A task that represents the asynchronous operation
+            A task that represents the asynchronous operation.
             The task result contains the brand.
             </returns>
             <response code="200">If the brands exists.</response>
@@ -90,7 +157,7 @@
             <param name="id">Brand identifier.</param>
             <param name="productParameters">Product parameters.</param>
             <returns>
-            A task that represents the asynchronous operation
+            A task that represents the asynchronous operation.
             The task result contains the paged products of a specific brand.
             </returns>
             <response code="200">If the brand exists.</response>
@@ -104,11 +171,10 @@
             <param name="id">Brand identifier.</param>
             <param name="productId">Product identifier.</param>
             <returns>
-            A task that represents the asynchronous operation
+            A task that represents the asynchronous operation.
             The task result contains the product of a specific brand.
             </returns>
             <response code="200">If the brand exists.</response>
-            <response code="400">If the product's price range is invalid.</response>
             <response code="404">If the brand doesn't exist.</response>
         </member>
         <member name="M:WebAPI.Controllers.BrandsController.CreateBrand(Application.Common.DTOs.BrandForCreationDto)">
@@ -117,11 +183,12 @@
             </summary>
             <param name="brandForCreationDto">Data transfer object for brand creation.</param>
             <returns>
-            A task that represents the asynchronous operation
+            A task that represents the asynchronous operation.
             The task result contains the newly created brand.
             </returns>
             <response code="201">If the brand is created.</response>
             <response code="400">If the brand is null.</response>
+            <response code="401">If the user is not authorized.</response>
             <response code="422">If the brand is invalid.</response>
         </member>
         <member name="M:WebAPI.Controllers.BrandsController.CreateBrandCollection(System.Collections.Generic.IEnumerable{Application.Common.DTOs.BrandForCreationDto})">
@@ -130,7 +197,7 @@
             </summary>
             <param name="brandForCreationDtos">Data transfers object for brand creation.</param>
             <returns>
-            A task that represents the asynchronous operation
+            A task that represents the asynchronous operation.
             The task result contains the newly created brand.
             </returns>
             <response code="201">If the brands are created.</response>
@@ -145,27 +212,106 @@
             <param name="id">Brand identifier.</param>
             <param name="productForCreationDto">Data transfer object for product creation.</param>
             <returns>
-            A task that represents the asynchronous operation
+            A task that represents the asynchronous operation.
             The task result contains the newly created product for a specific brand.
             </returns>
             <response code="201">If the product is created.</response>
             <response code="401">If the user is not authorized.</response>
-            <response code="404">If the brand doesn't exeist.</response>
+            <response code="404">If the brand doesn't exist.</response>
             <response code="422">If the product is invalid.</response>
         </member>
         <member name="M:WebAPI.Controllers.BrandsController.UpdateBrand(System.Guid,Application.Common.DTOs.BrandForUpdateDto)">
-             <summary>
-             Updates the brand.
-             </summary>
-             <param name="id">Brand identifier.</param>
-             <param name="brandForUpdateDto">Data transfer object for brand update.</param>
-             <returns>
-            A task that represents the asynchronous operation.
-             </returns>
-             <response code="204">If the brand is updated.</response>
-             <response code="401">If the user is not authorized.</response>
-             <response code="404">If the brand doesn't exeist.</response>
-             <response code="422">If the brand is invalid.</response>
+            <summary>
+            Updates the brand.
+            </summary>
+            <param name="id">Brand identifier.</param>
+            <param name="brandForUpdateDto">Data transfer object for brand update.</param>
+            <returns> A task that represents the asynchronous operation.</returns>
+            <response code="204">If the brand is updated.</response>
+            <response code="401">If the user is not authorized.</response>
+            <response code="404">If the brand doesn't exist.</response>
+            <response code="422">If the brand is invalid.</response>
+        </member>
+        <member name="M:WebAPI.Controllers.BrandsController.UpdateBrandProduct(System.Guid,System.Guid,Application.Common.DTOs.ProductForUpdateDto)">
+            <summary>
+            Updates the product of a specific brand.
+            </summary>
+            <param name="id">Brand identifier.</param>
+            <param name="productId">Product identifier.</param>
+            <param name="productForUpdateDto">Data transfer object for update product.</param>
+            <returns>A task that represents the asynchronous operation.</returns>
+            <response code="204">If the product is updated.</response>
+            <response code="401">If the user is not authorized.</response>
+            <response code="404">If the brand or product doesn't exist.</response>
+            <response code="422">If the product is invalid.</response>
+        </member>
+        <member name="M:WebAPI.Controllers.BrandsController.DeleteBrand(System.Guid)">
+            <summary>
+            Deletes the brand.
+            </summary>
+            <param name="id">Brand identifier.</param>
+            <returns>A task that represents the asynchronous operation.</returns>
+            <response code="204">If the brand is deleted.</response>
+            <response code="401">If the user is not authorized.</response>
+            <response code="404">If the brand or product doesn't exist.</response>
+        </member>
+        <member name="M:WebAPI.Controllers.BrandsController.DeleteBrandProduct(System.Guid,System.Guid)">
+            <summary>
+            Deletes the product for a specific brand.
+            </summary>
+            <param name="id">Brand identifier.</param>
+            <param name="productId">Product identifier.</param>
+            <returns>A task that represents the asynchronous operation.</returns>
+            <response code="204">If the product is deleted.</response>
+            <response code="401">If the user is not authorized.</response>
+            <response code="404">If the brand or product doesn't exist.</response>
+        </member>
+        <member name="M:WebAPI.Controllers.CategoriesController.GetAllCategories">
+            <summary>
+            Gets and returns a list of all categories.
+            </summary>
+            <returns>
+            A task that represents the asynchronous operation, containing the list of all categories.
+            </returns>
+        </member>
+        <member name="M:WebAPI.Controllers.CategoriesController.GetCategory(System.Guid)">
+            <summary>
+            Gets category by identifier.
+            </summary>
+            <param name="id">Category identifier.</param>
+            <returns>
+            A task that represents the asynchronous operation
+            The task result contains the category.
+            </returns>
+            <response code="200">If the category exists.</response>
+            <response code="404">If the category doesn't exist.</response>
+        </member>
+        <member name="M:WebAPI.Controllers.CategoriesController.GetSingleProductForCategory(System.Guid,System.Guid)">
+            <summary>
+            Gets the product of a specific category.
+            </summary>
+            <param name="id">Category identifier.</param>
+            <param name="productId">Product identifier.</param>
+            <returns>
+            A task that represents the asynchronous operation
+            The task result contains the product of a specific category.
+            </returns>
+            <response code="200">If the category exists.</response>
+            <response code="404">If the brand doesn't exist.</response>
+        </member>
+        <member name="M:WebAPI.Controllers.CategoriesController.CreateCategory(Application.Common.DTOs.CategoryForCreationDto)">
+            <summary>
+            Creates the category.
+            </summary>
+            <param name="categoryForCreationDto">Data transfer object for category creation.</param>
+            <returns>
+            A task that represents the asynchronous operation
+            The task result contains the newly created brand.
+            </returns>
+            <response code="201">If the category is created.</response>
+            <response code="400">If the category is null.</response>
+            <response code="401">If the user is not authorized.</response>
+            <response code="422">If the category is invalid.</response>
         </member>
         <member name="M:WebAPI.Controllers.ProductsController.GetAllPagedProducts(Application.Common.RequestFeatures.ProductParameters)">
             <summary>
@@ -183,6 +329,19 @@
             <returns>
             A task that represents the asynchronous operation, containing the list of all products.
             </returns>
+        </member>
+        <member name="M:WebAPI.Controllers.TokenController.Refresh(Application.Common.DTOs.TokenDto)">
+            <summary>
+            Refreshes a token.
+            </summary>
+            <param name="tokenDto">Data transfer object for refreh a token.</param>
+            <returns>
+            A task that represents the asynchronous operation
+            The task result contains the refresh token.
+            </returns>
+            <response code="200">If the token refreshed.</response>
+            <response code="400">If the token is null or does not match.</response>
+            <response code="401">If the user is not authorized.</response>
         </member>
         <member name="T:WebAPI.Extensions.ExceptionMiddlewareExtensions">
             <summary>

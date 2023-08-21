@@ -1,8 +1,7 @@
 ﻿using System.Security.Claims;
 using Application.Common.DTOs;
 using Application.Services;
-using Domain.Entities.Identity;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.ActionFilters;
 
@@ -11,12 +10,10 @@ namespace WebAPI.Controllers;
 public class AuthenticationController : BaseApiController
 {
     private readonly IServiceManager _service;
-    private readonly UserManager<AppUser> _userManager;
 
-    public AuthenticationController(IServiceManager service, UserManager<AppUser> userManager)
+    public AuthenticationController(IServiceManager service, IHttpContextAccessor httpContextAccessor)
     {
         _service = service;
-        _userManager = userManager;
     }
 
     /// <summary>
@@ -55,8 +52,8 @@ public class AuthenticationController : BaseApiController
     /// <response code="401">If the user is not authorized.</response>
     [HttpPost("login")]
     [ServiceFilter(typeof(ValidationFilterAttribute))]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> Authenticate([FromBody] UserForAuthenticationDto userForAuthenticationDto)
     {
         if (!await _service.AuthenticationService.ValidateUser(userForAuthenticationDto))
@@ -67,18 +64,72 @@ public class AuthenticationController : BaseApiController
         return Ok(tokenDto);
     }
 
-    [HttpGet]
-    public async Task<ActionResult<AppUser>> GetCurrentUser()
+    /// <summary>
+    /// Gets current user.
+    /// </summary>
+    /// <returns>
+    /// A task that represents the asynchronous operation.
+    /// The task result contains current user.
+    /// </returns>
+    /// <response code="200">If the user is exist.</response>
+    /// <response code="401">If the user is not authorized.</response>
+    [HttpGet("user")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> GetCurrentUser()
     {
-        var email = HttpContext.User?.Claims?
-            .FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
+        var user = await _service.AuthenticationService.GetCurrentUserAsync();
 
-        var user = await _userManager.FindByEmailAsync(email!);
+        return Ok(user); 
+    }
 
-        return new AppUser
-        {
-            Email = user!.Email,
-            UserName = user.UserName
-        };
+    /// <summary>
+    /// Gets the user's address.
+    /// </summary>
+    /// <returns>
+    /// A task that represents the asynchronous operation.
+    /// The task result contains the user's address.
+    /// </returns>
+    /// <response code="200">If the user's address is exist.</response>
+    /// <response code="401">If the user is not authorized.</response>
+    [HttpGet("address")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> GetUserAddress()
+    {
+        var address = await _service.AuthenticationService.GetUserAddressAsync();
+
+        return Ok(address);
+    }
+
+    /// <summary>
+    /// Updates the user's address.
+    /// </summary>
+    /// <returns>
+    /// A task that represents the asynchronous operation.
+    /// The task result contains the user's address.
+    /// </returns>
+    /// <response code="200">If the user's address is updated.</response>
+    /// <response code="401">If the user is not authorized.</response>
+    /// <response code="200">If the user's address is not updated.</response>
+    [HttpPut("address")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> UpdateUserAddress(AddressDto addressDto)
+    {
+        var address = await _service.AuthenticationService.UpdateUserAddressAsync(addressDto);
+
+        return Ok(address);
+    }
+
+    [HttpGet("emailexists")]
+    [Authorize]
+    public async Task<ActionResult<bool>> CheckEmailExists([FromQuery] string email)
+    {
+        return await _service.AuthenticationService.CheckEmailExistsAsync(email);
     }
 }

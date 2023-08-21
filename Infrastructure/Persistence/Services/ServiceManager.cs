@@ -3,6 +3,7 @@ using Application.Services;
 using AutoMapper;
 using Domain.Entities.Identity;
 using Domain.Logging;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 
@@ -59,9 +60,10 @@ public sealed class ServiceManager : IServiceManager
         IMapper mapper,
         UserManager<AppUser> userManager,
         IConfiguration configuration,
-        ILoggerManager logger)
+        ILoggerManager logger,
+        IHttpContextAccessor httpContextAccessor)
     {
-        _authenticationService = new Lazy<IAuthenticationService>(() => new AuthenticationService(logger, mapper, userManager, configuration));
+        _authenticationService = new Lazy<IAuthenticationService>(() => new AuthenticationService(logger, mapper, userManager, httpContextAccessor, configuration));
         _brandService = new Lazy<IBrandService>(() => new BrandService(repository, mapper));
         _basketService = new Lazy<IBasketService>(() => new BasketService(repository));
         _categoryService = new Lazy<ICategoryService>(() => new CategoryService(repository, mapper));

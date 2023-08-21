@@ -1,3 +1,6 @@
+
+using Microsoft.AspNetCore.Http;
+
 namespace Application.Services;
 
 /// <summary>
@@ -29,4 +32,5 @@ public interface IServiceManager
     /// Gets a product service.
     /// </summary>
     IProductService ProductService { get; }
+
 }

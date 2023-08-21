@@ -14,6 +14,7 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
 #nullable disable
+        CreateMap<Address, AddressDto>().ReverseMap();
         CreateMap<Brand, BrandDto>()
             .ForMember(d => d.ImageUrl, o => o.MapFrom<ImageUrlResolver<Brand, BrandDto>>());
 

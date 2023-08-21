@@ -49,4 +49,40 @@ public interface IAuthenticationService
     /// The task result contains the token in 'Compact Serialazation Format'.
     /// </returns>
     Task<TokenDto> RefreshToken(TokenDto tokenDto);
+
+    /// <summary>
+    /// Gets the current user.
+    /// </summary>
+    /// <returns>
+    /// A task that represents the asynchronous operation.
+    /// The task result contains the current user.
+    /// </returns>
+    Task<UserDto> GetCurrentUserAsync();
+
+    /// <summary>
+    /// Gets the user's address.
+    /// </summary>
+    /// <returns>
+    /// A task that represents the asynchronous operation.
+    /// The task result contains the user's address.
+    /// </returns>
+    Task<AddressDto> GetUserAddressAsync();
+
+    /// <summary>
+    /// Updates the user.
+    /// </summary>
+    /// <param name="addressDto">Data transfer object for address.</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation.
+    /// The task result contains the updated user.
+    /// </returns>
+    /// <exception cref="UpdateUserAddressBadRequest">If the update result is not successful.</exception>
+    Task<AddressDto> UpdateUserAddressAsync(AddressDto addressDto);
+
+    /// <summary>
+    /// Checks if email exists.
+    /// </summary>
+    /// <param name="email">A user's email.</param>
+    /// <returns>A task that represents the asynchronous operation.</returns>
+    Task<bool> CheckEmailExistsAsync(string email);
 }

@@ -14,7 +14,7 @@ public class RepositoryManager : IRepositoryManager
     // This means that our repository instances are only going 
     // to be created when we access them for the first time, and not before that.
 
-#region fields
+    #region fields
 
     private readonly DataContext _dataContext;
     private readonly Lazy<IBrandRepository> _brandRepository;
@@ -22,9 +22,9 @@ public class RepositoryManager : IRepositoryManager
     private readonly Lazy<ICategoryRepository> _categoryRepository;
     private readonly Lazy<IProductRepository> _productRepository;
 
-#endregion fields
+    #endregion fields
 
-#region properties
+    #region properties
     /// <summary>
     /// Gets a brand repository. 
     /// </summary>
@@ -45,9 +45,9 @@ public class RepositoryManager : IRepositoryManager
     /// </summary>
     public IProductRepository ProductRepository => _productRepository.Value; 
 
-#endregion properties
+    #endregion properties
 
-#region constructor
+    #region constructor
 
     public RepositoryManager(DataContext dataContext, IConnectionMultiplexer redis)
     {
@@ -58,7 +58,7 @@ public class RepositoryManager : IRepositoryManager
         _productRepository = new Lazy<IProductRepository>(() => new ProductRepository(dataContext));
     }
 
-#endregion constructor
+    #endregion constructor
 
     /// <summary>
     /// Saves all changes made in this repository to the database.

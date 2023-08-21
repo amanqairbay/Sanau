@@ -41,7 +41,7 @@ public static class ServiceExtensions
         which will eventually help us with the deployment to IIS.
     */
     public static void AddConfigureIISIntegration(this IServiceCollection services) => 
-        services.Configure<IISOptions>(options => {});
+        services.Configure<IISOptions>(options => { });
     
     public static void AddConfigureLoggerService(this IServiceCollection services) =>
         services.AddSingleton<ILoggerManager, LoggerManager>();
@@ -121,8 +121,6 @@ public static class ServiceExtensions
             };
         });
     }
-
-    
 
     public static void AddConfigureControllers(this IServiceCollection services) => 
         services.AddControllers(options =>
