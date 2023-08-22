@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Application.Common.DTOs;
+using Domain.Entities;
 
 namespace Application.Services;
 
@@ -25,7 +26,7 @@ public interface IBasketService
     /// A task that represents the asynchronous operation.
     /// The task result contains the basket.
     /// </returns>
-    Task<CustomerBasket?> UpdateBasketAsync(CustomerBasket basket);
+    Task<CustomerBasket?> UpdateBasketAsync(CustomerBasketDto basket);
 
     /// <summary>
     /// Deletes the basket by identifier.

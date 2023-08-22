@@ -91,6 +91,18 @@
             <response code="200">If the user's address is exist.</response>
             <response code="401">If the user is not authorized.</response>
         </member>
+        <member name="M:WebAPI.Controllers.AuthenticationController.UpdateUserAddress(Application.Common.DTOs.AddressDto)">
+            <summary>
+            Updates the user's address.
+            </summary>
+            <returns>
+            A task that represents the asynchronous operation.
+            The task result contains the user's address.
+            </returns>
+            <response code="200">If the user's address is updated.</response>
+            <response code="401">If the user is not authorized.</response>
+            <response code="200">If the user's address is not updated.</response>
+        </member>
         <member name="M:WebAPI.Controllers.BasketController.GetBasket(System.String)">
             <summary>
             Gets a basket.
@@ -101,7 +113,7 @@
             The task result contains the basket.
             </returns>
         </member>
-        <member name="M:WebAPI.Controllers.BasketController.UpdateBasketAsync(Domain.Entities.CustomerBasket)">
+        <member name="M:WebAPI.Controllers.BasketController.UpdateBasketAsync(Application.Common.DTOs.CustomerBasketDto)">
             <summary>
             Updates a basket.
             </summary>

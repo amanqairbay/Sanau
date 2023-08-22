@@ -116,6 +116,7 @@ public class AuthenticationController : BaseApiController
     /// <response code="200">If the user's address is not updated.</response>
     [HttpPut("address")]
     [Authorize]
+    [ServiceFilter(typeof(ValidationFilterAttribute))]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

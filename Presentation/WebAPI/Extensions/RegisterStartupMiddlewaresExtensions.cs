@@ -28,6 +28,7 @@ public static class RegisterStartupMiddlewaresExtensions
             app.UseHsts();
         }
 
+        app.UseConfigureSwagger();
         app.UseStaticFiles();
         app.UseHttpsRedirection();
         

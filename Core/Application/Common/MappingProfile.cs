@@ -30,6 +30,9 @@ public class MappingProfile : Profile
         CreateMap<BrandForUpdateDto, Brand>();
 
         CreateMap<UserForRegistrationDto, AppUser>();
+
+        CreateMap<CustomerBasketDto, CustomerBasket>();
+        CreateMap<BasketItemDto, BasketItem>();
 #nullable disable
     }
 }

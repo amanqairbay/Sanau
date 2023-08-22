@@ -65,7 +65,7 @@ public sealed class ServiceManager : IServiceManager
     {
         _authenticationService = new Lazy<IAuthenticationService>(() => new AuthenticationService(logger, mapper, userManager, httpContextAccessor, configuration));
         _brandService = new Lazy<IBrandService>(() => new BrandService(repository, mapper));
-        _basketService = new Lazy<IBasketService>(() => new BasketService(repository));
+        _basketService = new Lazy<IBasketService>(() => new BasketService(repository, mapper));
         _categoryService = new Lazy<ICategoryService>(() => new CategoryService(repository, mapper));
         _productService = new Lazy<IProductService>(() => new ProductService(repository, mapper));
     }

@@ -1,6 +1,8 @@
-﻿using Application.Services;
+﻿using Application.Common.DTOs;
+using Application.Services;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
+using WebAPI.ActionFilters;
 
 namespace WebAPI.Controllers;
 
@@ -38,9 +40,10 @@ public class BasketController : BaseApiController
     /// The task result contains the updated basket.
     /// </returns>
     [HttpPost]
-    public async Task<IActionResult> UpdateBasketAsync(CustomerBasket basket)
+    [ServiceFilter(typeof(ValidationFilterAttribute))]
+    public async Task<IActionResult> UpdateBasketAsync(CustomerBasketDto basketDto)
     {
-        var updatedBasket = await _service.BasketService.UpdateBasketAsync(basket);
+        var updatedBasket = await _service.BasketService.UpdateBasketAsync(basketDto);
 
         return Ok(updatedBasket);
     }

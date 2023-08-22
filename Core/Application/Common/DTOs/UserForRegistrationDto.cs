@@ -10,18 +10,22 @@ public record UserForRegistrationDto
     /// <summary>
     /// Gets or initializes the user's name.
     /// </summary>
+    [Required]
     public string UserName { get; init; } = String.Empty;
 
     /// <summary>
     /// Gets or initializes the user's email.
     /// </summary>
-    [Required(ErrorMessage = "Email is required")]
+    /// [Required(ErrorMessage = "Email is required")]
+    [EmailAddress]
     public string Email { get; init; } = String.Empty;
 
     /// <summary>
     /// Gets or initializes the user's password.
     /// </summary>
-    [Required(ErrorMessage = "Password is required")]
+    [Required(ErrorMessage = "Password is required.")]
+    [RegularExpression("(?=^.{8,16}$)(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&amp;*()_+}{&quot;:;'?/&gt;.&lt;,])(?!.*\\s).*$",
+            ErrorMessage = "Password must have 1 Uppercase, 1 Lowercase, 1 number non alphanumeric and at least 6 characters.")]
     public string Password { get; init; } = String.Empty;
 
     /// <summary>

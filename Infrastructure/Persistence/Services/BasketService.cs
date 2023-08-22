@@ -1,5 +1,7 @@
-﻿using Application.Repositories;
+﻿using Application.Common.DTOs;
+using Application.Repositories;
 using Application.Services;
+using AutoMapper;
 using Domain.Entities;
 
 namespace Persistence.Services;
@@ -10,10 +12,12 @@ namespace Persistence.Services;
 internal sealed class BasketService : IBasketService
 {
     private readonly IRepositoryManager _repository;
+    private readonly IMapper _mapper;
 
-    public BasketService(IRepositoryManager repository)
+    public BasketService(IRepositoryManager repository, IMapper mapper)
     {
         _repository = repository;
+        _mapper = mapper;
     }
 
     /// <summary>
@@ -39,8 +43,9 @@ internal sealed class BasketService : IBasketService
     /// A task that represents the asynchronous operation.
     /// The task result contains the basket.
     /// </returns>
-    public async Task<CustomerBasket?> UpdateBasketAsync(CustomerBasket basket)
+    public async Task<CustomerBasket?> UpdateBasketAsync(CustomerBasketDto basketDto)
     {
+        var basket = _mapper.Map<CustomerBasketDto, CustomerBasket>(basketDto);
         var updatedBasket = await _repository.BasketRepository.UpdateBasketAsync(basket);
 
         return updatedBasket;

@@ -102,14 +102,14 @@ public static class ServiceExtensions
 
         var secretKey = jwtConfiguration.SecretKey;
 
-        services.AddAuthentication(opt =>
+        services.AddAuthentication(authOptions =>
         {
-            opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            authOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            authOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
         })
-        .AddJwtBearer(options =>
+        .AddJwtBearer(jwtOptions =>
         {
-            options.TokenValidationParameters = new TokenValidationParameters
+            jwtOptions.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuer = true,
                 ValidateAudience = true,

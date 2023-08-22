@@ -54,6 +54,12 @@ internal sealed class AuthenticationService : IAuthenticationService
     /// </returns>
     public async Task<IdentityResult> RegisterUser(UserForRegistrationDto userForRegistration)
     {
+        if (CheckEmailExistsAsync(userForRegistration.Email).Result == true)
+        {
+            Console.WriteLine("true");
+            throw new CheckEmailExistsBadRequest();
+        }
+
         var user = _mapper.Map<AppUser>(userForRegistration);
         var result = await _userManager.CreateAsync(user, userForRegistration.Password);
 
