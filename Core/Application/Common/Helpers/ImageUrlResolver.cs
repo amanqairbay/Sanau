@@ -12,14 +12,10 @@ public class ImageUrlResolver<TSource, TDestination> : IValueResolver<TSource, T
 {
     private readonly IConfiguration _configuration;
 
-#region constructor
-
     public ImageUrlResolver(IConfiguration configuration)
     {
         _configuration = configuration;
     }
-
-#endregion constructor
 
     /// <summary>
     /// Implementors use source object to provide a destination object.

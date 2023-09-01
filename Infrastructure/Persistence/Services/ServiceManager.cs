@@ -21,6 +21,8 @@ public sealed class ServiceManager : IServiceManager
     private readonly Lazy<IBasketService> _basketService;
     private readonly Lazy<ICategoryService> _categoryService;
     private readonly Lazy<IProductService> _productService;
+    private readonly Lazy<IOrderService> _orderService;
+    private readonly Lazy<IDeliveryMethodService> _deliveryMethodService;
 
     #endregion fields
 
@@ -51,6 +53,16 @@ public sealed class ServiceManager : IServiceManager
     /// </summary>
     public IProductService ProductService => _productService.Value;
 
+    /// <summary>
+    /// Gets an order service value.
+    /// </summary>
+    public IOrderService OrderService => _orderService.Value;
+
+    /// <summary>
+    /// Gets a delivery method service.
+    /// </summary>
+    public IDeliveryMethodService DeliveryMethodService => _deliveryMethodService.Value;
+
     #endregion properties
 
     #region constructor
@@ -68,6 +80,8 @@ public sealed class ServiceManager : IServiceManager
         _basketService = new Lazy<IBasketService>(() => new BasketService(repository, mapper));
         _categoryService = new Lazy<ICategoryService>(() => new CategoryService(repository, mapper));
         _productService = new Lazy<IProductService>(() => new ProductService(repository, mapper));
+        _orderService = new Lazy<IOrderService>(() => new OrderService(httpContextAccessor, repository, mapper));
+        _deliveryMethodService = new Lazy<IDeliveryMethodService>(() => new DeliveryMethodService(repository));
     }
 
     #endregion constructor

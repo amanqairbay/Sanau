@@ -210,8 +210,8 @@ internal sealed class ProductService : IProductService
     /// <param name="brandTrackChanges">Used to improve the performance of read-only queries.</param>
     /// <param name="productTrackChanges">Used to improve the performance of read-only queries.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
-    public async Task UpdateProductForBrandAsync(Guid brandId, Guid productId, ProductForUpdateDto productForUpdateDto, 
-        bool brandTrackChanges, bool productTrackChanges)
+    public async Task UpdateProductForBrandAsync(Guid brandId, Guid productId,
+        ProductForUpdateDto productForUpdateDto, bool brandTrackChanges, bool productTrackChanges)
     {
         await CheckIfBrandExistsAsync(brandId, brandTrackChanges);
         
@@ -267,11 +267,8 @@ internal sealed class ProductService : IProductService
     /// </returns>
     private async Task<Product> GetProductForBrandAndCheckIfExistsAsync(Guid brandId, Guid productId, bool trackChanges)
     {
-        var product = await _repository.ProductRepository.GetSingleProductForBrandAsync(brandId, productId, trackChanges);
-        if (product is null)
-            throw new ProductNotFoundException(productId);
-
-        return product;
+        return await _repository.ProductRepository
+            .GetSingleProductForBrandAsync(brandId, productId, trackChanges) ?? throw new ProductNotFoundException(productId);
     }
 
     /// <summary>
@@ -299,11 +296,8 @@ internal sealed class ProductService : IProductService
     /// </returns>
     private async Task<Product> GetProductForCategoryAndCheckIfExistsAsync(Guid categoryId, Guid productId, bool trackChanges)
     {
-        var product = await _repository.ProductRepository.GetSingleProductForCategoryAsync(categoryId, productId, trackChanges);
-        if (product is null)
-            throw new ProductNotFoundException(productId);
-
-        return product;
+        return await _repository.ProductRepository
+            .GetSingleProductForCategoryAsync(categoryId, productId, trackChanges) ?? throw new ProductNotFoundException(productId);
     }
 
     #endregion private methods

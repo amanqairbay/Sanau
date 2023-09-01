@@ -34,7 +34,7 @@ public class BasketController : BaseApiController
     /// <summary>
     /// Updates a basket.
     /// </summary>
-    /// <param name="basket">Basket.</param>
+    /// <param name="basketDto">Basket data transfer object.</param>
     /// <returns>
     /// A task that represents the asynchronous operation
     /// The task result contains the updated basket.

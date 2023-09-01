@@ -20,7 +20,17 @@ public interface IRepositoryManager
     /// <summary>
     /// Gets a product repository.
     /// </summary>
-    IProductRepository ProductRepository { get; }    
+    IProductRepository ProductRepository { get; }
+
+    /// <summary>
+    /// Gets an order repository.
+    /// </summary>
+    IOrderRepository OrderRepository { get; }
+
+    /// <summary>
+    /// Gets a delivery method repository.
+    /// </summary>
+    IDeliveryMethodRepository DeliveryMethodRepository { get; }
 
     /// <summary>
     /// Saves all changes made in this repository to the database.

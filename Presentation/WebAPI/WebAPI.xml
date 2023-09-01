@@ -117,7 +117,7 @@
             <summary>
             Updates a basket.
             </summary>
-            <param name="basket">Basket.</param>
+            <param name="basketDto">Basket data transfer object.</param>
             <returns>
             A task that represents the asynchronous operation
             The task result contains the updated basket.
@@ -325,22 +325,63 @@
             <response code="401">If the user is not authorized.</response>
             <response code="422">If the category is invalid.</response>
         </member>
+        <member name="M:WebAPI.Controllers.OrdersController.CreateOrder(Application.Common.DTOs.OrderDto)">
+            <summary>
+            Creates an order.
+            </summary>
+            <param name="orderDto">Data transfer object for order creating.</param>
+            <returns>
+            A task that represents the asynchronous operation.
+            The task result contains the created order.
+            </returns>
+            <response code="201">If the order is created.</response>
+            <response code="400">If the order is null.</response>
+        </member>
+        <member name="M:WebAPI.Controllers.OrdersController.GetOrdersForUser">
+            <summary>
+            Gets user's orders.
+            </summary>
+            <returns>
+            A task that represents the asynchronous operation.
+            The task result contains user's orders.
+            </returns>
+            <response code="200">If the orders exist.</response>
+            <response code="401">If the user is unauthorized.</response>
+        </member>
+        <member name="M:WebAPI.Controllers.OrdersController.GetOrderByIdForUser(System.Guid)">
+            <summary>
+            Gets orders by identifiers.
+            </summary>
+            <param name="id">Order identifier.</param>
+            <returns>
+            A task that represents the asynchronous operation.
+            The task result contains the order.
+            </returns>
+            <response code="200">If the order exists.</response>
+            <response code="401">If the user is unauthorized.</response>
+            <response code="404">If the order doesn't exist.</response>
+        </member>
+        <member name="M:WebAPI.Controllers.OrdersController.GetDeliveryMethods">
+            <summary>
+            Gets delivery methods.
+            </summary>
+            <returns>
+            A task that represents the asynchronous operation.
+            The task result contains delivery methods.
+            </returns>
+        </member>
         <member name="M:WebAPI.Controllers.ProductsController.GetAllPagedProducts(Application.Common.RequestFeatures.ProductParameters)">
             <summary>
             Gets and returns a list of products by parameters.
             </summary>
             <param name="productParameters">The product params to get for.</param>
-            <returns>
-            A task that represents the asynchronous operation, containing the list of products.
-            </returns>
+            <returns>A task that represents the asynchronous operation, containing the list of products.</returns>
         </member>
         <member name="M:WebAPI.Controllers.ProductsController.GetAllProducts">
             <summary>
             Gets and returns a list of all products.
             </summary>
-            <returns>
-            A task that represents the asynchronous operation, containing the list of all products.
-            </returns>
+            <returns>A task that represents the asynchronous operation, containing the list of all products.</returns>
         </member>
         <member name="M:WebAPI.Controllers.TokenController.Refresh(Application.Common.DTOs.TokenDto)">
             <summary>

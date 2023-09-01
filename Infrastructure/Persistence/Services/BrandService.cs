@@ -182,11 +182,9 @@ internal sealed class BrandService : IBrandService
     /// </returns>
     private async Task<Brand> GetBrandAndCheckIfItExists(Guid brandId, bool trackChanges)
     {
-        var brand = await _repository.BrandRepository.GetBrandByIdAsync(brandId, trackChanges);
-        if (brand is null)
-            throw new BrandNotFoundException(brandId);
+        return await _repository.BrandRepository
+            .GetBrandByIdAsync(brandId, trackChanges) ?? throw new BrandNotFoundException(brandId);
         
-        return brand;
     }
 
     #endregion private methods

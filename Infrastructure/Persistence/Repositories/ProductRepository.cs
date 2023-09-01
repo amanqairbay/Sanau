@@ -55,6 +55,19 @@ public class ProductRepository : BaseRepository<Product>, IProductRepository
     }
 
     /// <summary>
+    /// Gets a product by identifier.
+    /// </summary>
+    /// <param name="productId">Product identifier.</param>
+    /// <param name="trackChanges">Used to improve the performance of read-only queries.</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation.
+    /// The task result contains the product.
+    /// </returns>
+    public async Task<Product?> GetProductByIdAsync(Guid productId, bool trackChanges) =>
+        await FindByCondition(p => p.Id.Equals(productId), trackChanges)
+        .SingleOrDefaultAsync();
+
+    /// <summary>
     /// Gets a product for brand.
     /// </summary>
     /// <param name="brandId">Brand identifier.</param>

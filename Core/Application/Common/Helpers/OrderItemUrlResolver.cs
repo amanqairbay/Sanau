@@ -1,18 +1,18 @@
 ﻿using Application.Common.DTOs;
 using AutoMapper;
-using Domain.Entities;
+using Domain.Entities.OrderAggregate;
 using Microsoft.Extensions.Configuration;
 
 namespace Application.Common.Helpers;
 
 /// <summary>
-/// Represents a product image url resolver.
+/// Represents an order item's image url resolver.
 /// </summary>
-public class ProductUrlResolver : IValueResolver<Product, ProductDto, string>
+public class OrderItemUrlResolver : IValueResolver<OrderItem, OrderItemDto, string>
 {
     private readonly IConfiguration _configuration;
 
-    public ProductUrlResolver(IConfiguration configuration)
+    public OrderItemUrlResolver(IConfiguration configuration)
     {
         _configuration = configuration;
     }
@@ -25,11 +25,11 @@ public class ProductUrlResolver : IValueResolver<Product, ProductDto, string>
     /// <param name="destMember">Destination member.</param>
     /// <param name="context">The context of the mapping.</param>
     /// <returns>Result, typically build from the source resolution result.</returns>
-    public string Resolve(Product source, ProductDto destination, string destMember, ResolutionContext context)
+    public string Resolve(OrderItem source, OrderItemDto destination, string destMember, ResolutionContext context)
     {
-        if (!string.IsNullOrEmpty(source.ImageUrl))
+        if (!string.IsNullOrEmpty(source.ItemOrdered.ImageUrl))
         {
-            return _configuration["ApiUrl"] + source.ImageUrl;
+            return _configuration["ApiUrl"] + source.ItemOrdered.ImageUrl;
         }
 
         return null!;

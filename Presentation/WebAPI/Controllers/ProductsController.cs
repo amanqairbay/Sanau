@@ -21,9 +21,7 @@ public class ProductsController : BaseApiController
     /// Gets and returns a list of products by parameters.
     /// </summary>
     /// <param name="productParameters">The product params to get for.</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation, containing the list of products.
-    /// </returns>
+    /// <returns>A task that represents the asynchronous operation, containing the list of products.</returns>
     [HttpGet]
     public async Task<IActionResult> GetAllPagedProducts([FromQuery] ProductParameters productParameters)
     {
@@ -37,11 +35,8 @@ public class ProductsController : BaseApiController
     /// <summary>
     /// Gets and returns a list of all products.
     /// </summary>
-    /// <returns>
-    /// A task that represents the asynchronous operation, containing the list of all products.
-    /// </returns>
+    /// <returns>A task that represents the asynchronous operation, containing the list of all products.</returns>
     [HttpGet("all")]
-    [Authorize(Roles ="Administrator")]
     [ApiExplorerSettings(GroupName = "v1")]
     public async Task<IActionResult> GetAllProducts()
     {

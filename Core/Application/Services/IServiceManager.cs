@@ -33,4 +33,13 @@ public interface IServiceManager
     /// </summary>
     IProductService ProductService { get; }
 
+    /// <summary>
+    /// Gets an order service.
+    /// </summary>
+    IOrderService OrderService { get; }
+
+    /// <summary>
+    /// Gets a delivery method service.
+    /// </summary>
+    IDeliveryMethodService DeliveryMethodService { get; }
 }
