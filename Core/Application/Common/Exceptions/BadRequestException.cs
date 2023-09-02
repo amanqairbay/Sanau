@@ -1,12 +1,11 @@
 namespace Application.Common.Exceptions;
 
 /// <summary>
-/// Represents an abstract class, that is the base class for all individual bad request exception classes. 
-/// It inherits from the Exception class to represent the errors that occur during application execution.
+/// Represents an exception bad request.
 /// </summary>
-public abstract class BadRequestException : Exception
+public sealed class BadRequestException : Exception
 {
-    protected BadRequestException(string message) : base(message)
+    public BadRequestException(string message) : base(message)
     {
         
     }

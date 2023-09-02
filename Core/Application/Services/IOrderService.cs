@@ -17,7 +17,7 @@ public interface IOrderService
     /// The task result contains the created order.
     /// </returns>
     /// <exception cref="CreateOrderBadRequest">Bad Request exception for order creating.</exception>
-    Task<Order> CreateOrderAsync(OrderDto orderDto);
+    Task<OrderToReturnDto> CreateOrderAsync(OrderDto orderDto);
 
     /// <summary>
     /// Gets user's orders. 

@@ -59,10 +59,11 @@ internal sealed class ProductService : IProductService
     /// A task that represents the asynchronous operation.
     /// The task result contains the paged products.
     /// </returns>
+    /// <exception cref="BadRequestException">Thrown when the maximum price is less than the minimum.</exception>
     public async Task<(IEnumerable<ProductDto> Products, MetaData MetaData)> GetPagedProductsAsync(ProductParameters productParameters, bool trackChanges)
     {
         if (!productParameters.ValidPriceRange)
-            throw new MaxPriceRangeBadRequestException();
+            throw new BadRequestException($"Maximum price can't be less than minimum price.");
 
         var productsWithMetaData = await _repository.ProductRepository.GetPagedProductsAsync(productParameters, trackChanges);
 
@@ -140,10 +141,11 @@ internal sealed class ProductService : IProductService
     /// A task that represents the asynchronous operation.
     /// The task result contains the paged products.
     /// </returns>
+    /// <exception cref="BadRequestException">Thrown when the maximum price is less than the minimum.</exception>
     public async Task<(IEnumerable<ProductDto> Products, MetaData MetaData)> GetPagedProductsForBrandAsync(Guid brandId, ProductParameters productParameters, bool trackChanges)
     {
         if (!productParameters.ValidPriceRange)
-            throw new MaxPriceRangeBadRequestException();
+            throw new BadRequestException("Maximum price can't be less than minimum price.");
             
         await CheckIfBrandExistsAsync(brandId, trackChanges);
 
@@ -248,11 +250,12 @@ internal sealed class ProductService : IProductService
     /// <param name="brandId">Brand identifier.</param>
     /// <param name="trackChanges">Used to improve the performance of read-only queries.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
+    /// <exception cref="NotFoundException">Thrown when the brand doesn't exist in the database.</exception>
     private async Task CheckIfBrandExistsAsync(Guid brandId, bool trackChanges)
     {
         var brand = await _repository.BrandRepository.GetBrandByIdAsync(brandId, trackChanges);
         if (brand is null)
-            throw new BrandNotFoundException(brandId);
+            throw new NotFoundException($"The brand with id: {brandId} doesn't exist in the database.");
     }
 
     /// <summary>
@@ -265,10 +268,11 @@ internal sealed class ProductService : IProductService
     /// A task that represents the asynchronous operation.
     /// The task result contains a product.
     /// </returns>
+    /// <exception cref="NotFoundException">Thrown when the product doesn't exist in the database.</exception>
     private async Task<Product> GetProductForBrandAndCheckIfExistsAsync(Guid brandId, Guid productId, bool trackChanges)
     {
         return await _repository.ProductRepository
-            .GetSingleProductForBrandAsync(brandId, productId, trackChanges) ?? throw new ProductNotFoundException(productId);
+            .GetSingleProductForBrandAsync(brandId, productId, trackChanges) ?? throw new NotFoundException($"The product with id: {productId} doesn't exist in the database.");
     }
 
     /// <summary>
@@ -277,11 +281,12 @@ internal sealed class ProductService : IProductService
     /// <param name="categoryId">Category identifier.</param>
     /// <param name="trackChanges">Used to improve the performance of read-only queries.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
+    /// <exception cref="NotFoundException">Thrown when the category doesn't exist in the database.</exception>
     private async Task CheckIfCategoryExistsAsync(Guid categoryId, bool trackChanges)
     {
         var category = await _repository.CategoryRepository.GetCategoryByIdAsync(categoryId, trackChanges);
         if (category is null)
-            throw new CategoryNotFoundException(categoryId);
+            throw new NotFoundException($"The category with id: {categoryId} doesn't exist in the database.");
     }
 
     /// <summary>
@@ -294,10 +299,11 @@ internal sealed class ProductService : IProductService
     /// A task that represents the asynchronous operation.
     /// The task result contains a product.
     /// </returns>
+    /// <exception cref="NotFoundException">Thrown when the product doesn't exist in the database.</exception>
     private async Task<Product> GetProductForCategoryAndCheckIfExistsAsync(Guid categoryId, Guid productId, bool trackChanges)
     {
         return await _repository.ProductRepository
-            .GetSingleProductForCategoryAsync(categoryId, productId, trackChanges) ?? throw new ProductNotFoundException(productId);
+            .GetSingleProductForCategoryAsync(categoryId, productId, trackChanges) ?? throw new NotFoundException($"The product with id: {productId} doesn't exist in the database.");
     }
 
     #endregion private methods

@@ -45,14 +45,14 @@ internal sealed class OrderService : IOrderService
     /// A task that represents the asynchronous operation.
     /// The task result contains the created order.
     /// </returns>
-    /// <exception cref="CreateOrderBadRequest">Bad Request exception for order creating.</exception>
-    public async Task<Order> CreateOrderAsync(OrderDto orderDto)
+    /// <exception cref="BadRequestException">Thrown when there are problems with creating an order.</exception>
+    public async Task<OrderToReturnDto> CreateOrderAsync(OrderDto orderDto)
     {
         var buyerEmail = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Email);
 
         var address = _mapper.Map<AddressDto, Domain.Entities.OrderAggregate.Address>(orderDto.ShipToAddress);
 
-        var order = await CreateAndGetOrderAsync(buyerEmail!, orderDto.deliveryMethodId, orderDto.basketId, address) ?? throw new CreateOrderBadRequest();
+        var order = await CreateAndGetOrderAsync(buyerEmail!, orderDto.deliveryMethodId, orderDto.basketId, address) ?? throw new BadRequestException("There are problems with creating an order.");
 
         return order;
     }
@@ -81,13 +81,13 @@ internal sealed class OrderService : IOrderService
     /// A task that represents the asynchronous operation.
     /// The task result contains the order.
     /// </returns>
-    /// <exception cref="OrderNotFoundException">Not found exception for order.</exception>
+    /// <exception cref="NotFoundException">Thrown when the order doesn't exist in the database.</exception>
     public async Task<OrderToReturnDto?> GetOrderByIdAsync(Guid orderId)
     {
         var buyerEmail = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Email);
 
         var order = await _repository.OrderRepository
-            .GetOrderByIdAsync(orderId, buyerEmail, trackChanges: false) ?? throw new OrderNotFoundException(orderId);
+            .GetOrderByIdAsync(orderId, buyerEmail, trackChanges: false) ?? throw new NotFoundException($"The order with id: {orderId} doesn't exist in the database.");
 
         return _mapper.Map<OrderToReturnDto>(order);
     }
@@ -119,7 +119,7 @@ internal sealed class OrderService : IOrderService
     /// A task that represents the asynchronous operation.
     /// The task result contains the order.
     /// </returns>
-    private async Task<Order> CreateAndGetOrderAsync(string buyerEmail, Guid deliveryMethodId, string basketId, Domain.Entities.OrderAggregate.Address shippingAddress)
+    private async Task<OrderToReturnDto> CreateAndGetOrderAsync(string buyerEmail, Guid deliveryMethodId, string basketId, Domain.Entities.OrderAggregate.Address shippingAddress)
     {
         // get basket from repository
         var basket = await GetBasketAndCheckIfExistsAsync(basketId);
@@ -156,18 +156,19 @@ internal sealed class OrderService : IOrderService
         // return order.
         var order = await _repository.OrderRepository.GetOrderByIdAsync(createdOrder.Id, buyerEmail, trackChanges: false);
 
-        return order!;
+        return _mapper.Map<OrderToReturnDto>(order);
     }
 
     /// <summary>
     /// Checks if the basket exists.
     /// </summary>
-    /// <param name="basket">Basket identifier.</param>
+    /// <param name="basketId">Basket identifier.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
+    /// <exception cref="NotFoundException">Thrown when the basket doesn't exist in the database.</exception>
     private async Task<CustomerBasket> GetBasketAndCheckIfExistsAsync(string basketId)
     {
         return await _repository.BasketRepository.GetBasketAsync(basketId)
-            ?? throw new BasketNotFoundException(basketId);   
+            ?? throw new NotFoundException($"The basket with id: {basketId} doesn't exist in the database.");   
     }
 
     /// <summary>
@@ -175,13 +176,13 @@ internal sealed class OrderService : IOrderService
     /// </summary>
     /// <param name="deliveryMethodId">Delivery  methods identifier.</param>
     /// <returns></returns>
-    /// <exception cref="DeliveryMethodNotFoundException">Not found exception for delivery method.</exception>
+    /// <exception cref="NotFoundException">Thrown when the delivery method doesn't exist in the database.</exception>
     private async Task CheckDeliveryMethodExists(Guid deliveryMethodId)
     {
         var deliveryMethod = await _repository.DeliveryMethodRepository.GetByIdAsync(deliveryMethodId, trackChanges: false);
 
         if (deliveryMethod is null)
-            throw new DeliveryMethodNotFoundException(deliveryMethodId);
+            throw new NotFoundException($"The delivery method with id: { deliveryMethodId } doesn't exist in the database.");
     }
 
     #endregion private methods

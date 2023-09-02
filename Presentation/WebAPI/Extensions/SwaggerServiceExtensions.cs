@@ -58,6 +58,7 @@ public static class SwaggerServiceExtensions
 
             var xmlFile = $"{typeof(Program).GetTypeInfo().Assembly.GetName().Name}.xml";
             var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+
             s.IncludeXmlComments(xmlPath);
         });
     }

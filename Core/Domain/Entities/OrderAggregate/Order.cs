@@ -38,7 +38,7 @@ public class Order : BaseEntity
     public IReadOnlyList<OrderItem> OrderItems { get; set; }
 
     /// <summary>
-    /// Gets or sets a sbtotal.
+    /// Gets or sets a subtotal.
     /// </summary>
     public decimal Subtotal { get; set; }
 

@@ -1,6 +1,5 @@
 ﻿using Application.Common.DTOs;
 using Application.Services;
-using Domain.Entities.OrderAggregate;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.ActionFilters;

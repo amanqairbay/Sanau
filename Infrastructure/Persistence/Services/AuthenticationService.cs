@@ -52,12 +52,13 @@ internal sealed class AuthenticationService : IAuthenticationService
     /// A task that represents the asynchronous operation.
     /// The task result contains the result.
     /// </returns>
+    /// <exception cref="BadRequestException">Thrown if the registered user's email exists in the database</exception>
     public async Task<IdentityResult> RegisterUser(UserForRegistrationDto userForRegistration)
     {
         if (CheckEmailExistsAsync(userForRegistration.Email).Result == true)
         {
             Console.WriteLine("true");
-            throw new CheckEmailExistsBadRequest();
+            throw new BadRequestException("Email address is in use.");
         }
 
         var user = _mapper.Map<AppUser>(userForRegistration);
@@ -137,6 +138,7 @@ internal sealed class AuthenticationService : IAuthenticationService
     /// A task that represents the asynchronous operation.
     /// The task result contains the token in 'Compact Serialazation Format'.
     /// </returns>
+    /// <exception cref="BadRequestException">Thrown when there is an invalid request from the client and the token has some invalid value.</exception>
     public async Task<TokenDto> RefreshToken(TokenDto tokenDto)
     {
         var principal = GetPrincipalFromExpiredToken(tokenDto.AccessToken);
@@ -144,7 +146,7 @@ internal sealed class AuthenticationService : IAuthenticationService
         var user = await _userManager.FindByNameAsync(principal.Identity!.Name!);
 
         if (user == null || user.RefreshToken != tokenDto.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
-            throw new RefreshTokenBadRequest();
+            throw new BadRequestException("Invalid client request. The tokenDto has some invalid values.");
 
         _user = user;
 
@@ -203,7 +205,7 @@ internal sealed class AuthenticationService : IAuthenticationService
     /// A task that represents the asynchronous operation.
     /// The task result contains the updated user.
     /// </returns>
-    /// <exception cref="UpdateUserAddressBadRequest">If the update result is not successful.</exception>
+    /// <exception cref="BadRequestException">Thrown when the update result is not successful.</exception>
     public async Task<AddressDto> UpdateUserAddressAsync(AddressDto addressDto)
     {
         var email = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Email);
@@ -217,7 +219,7 @@ internal sealed class AuthenticationService : IAuthenticationService
         var result = await _userManager.UpdateAsync(_user);
 
         if (!result.Succeeded)
-            throw new UpdateUserAddressBadRequest();
+            throw new BadRequestException("Problems with updating the user.");
 
 
         var addressToReturn = _mapper.Map<Address, AddressDto>(_user.Address);

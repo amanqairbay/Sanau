@@ -68,15 +68,16 @@ internal sealed class BrandService : IBrandService
     /// A task that represents the asynchronous operation.
     /// The task result contains the brands.
     /// </returns>
+    /// <exception cref="BadRequestException">Thrown if parameter brandIds is null or collection count mismatch comparing to ids.</exception>
     public async Task<IEnumerable<BrandDto>> GetBrandsByIdsAsync(IEnumerable<Guid> brandIds, bool trackChanges)
     {
         if (brandIds is null)
-            throw new IdParametersBadRequestException();
+            throw new BadRequestException($"Parameter brandIds is null.");
 
         var brands = await _repository.BrandRepository.GetBrandsByIdsAsync(brandIds, trackChanges);
         
         if (brandIds.Count() != brands.Count())
-            throw new CollectionByIdsBadRequestException();
+            throw new BadRequestException("Collection count mismatch comparing to ids.");
 
         var brandsDto = _mapper.Map<IEnumerable<BrandDto>>(brands);
 
@@ -121,7 +122,7 @@ internal sealed class BrandService : IBrandService
         IEnumerable<BrandForCreationDto> brandForCreationDtos)
     {
         if (brandForCreationDtos is null)
-            throw new BrandCollectionBadRequest();
+            throw new BadRequestException("Brand collection sent from a client is null.");
 
         var brands = _mapper.Map<IEnumerable<Brand>>(brandForCreationDtos);
 
@@ -180,11 +181,12 @@ internal sealed class BrandService : IBrandService
     /// A task that represents the asynchronous operation.
     /// The task result contains the brand.
     /// </returns>
+    /// <exception cref="NotFoundException">Thrown when the brand doesn't exist in the database.</exception>
     private async Task<Brand> GetBrandAndCheckIfItExists(Guid brandId, bool trackChanges)
     {
         return await _repository.BrandRepository
-            .GetBrandByIdAsync(brandId, trackChanges) ?? throw new BrandNotFoundException(brandId);
-        
+            .GetBrandByIdAsync(brandId, trackChanges) ?? throw new NotFoundException($"The brand with id: {brandId} doesn't exist in the database.");
+
     }
 
     #endregion private methods

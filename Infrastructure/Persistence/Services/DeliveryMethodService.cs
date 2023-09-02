@@ -16,12 +16,18 @@ public sealed class DeliveryMethodService : IDeliveryMethodService
         _repository = repository;
     }
 
+    /// <summary>
+    /// Checks if delivery method exists.
+    /// </summary>
+    /// <param name="deliveryMethodId">Delivery method identifier.</param>
+    /// <returns></returns>
+    /// <exception cref="NotFoundException">Throw if the delivery method doesn't exist in the database.</exception>
     public async Task CheckDeliveryMethodExists(Guid deliveryMethodId)
     {
         var deliveryMethod = await _repository.DeliveryMethodRepository.GetByIdAsync(deliveryMethodId, trackChanges: false);
 
         if (deliveryMethod is null)
-            throw new DeliveryMethodNotFoundException(deliveryMethodId);
+            throw new NotFoundException($"The delivery method with id: {deliveryMethodId} doesn't exist in the database.");
     }
 }
 

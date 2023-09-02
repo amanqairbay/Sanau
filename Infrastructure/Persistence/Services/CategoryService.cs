@@ -4,7 +4,6 @@ using Application.Repositories;
 using Application.Services;
 using AutoMapper;
 using Domain.Entities;
-using Domain.Logging;
 
 namespace Persistence.Services;
 
@@ -45,12 +44,13 @@ internal sealed class CategoryService : ICategoryService
     /// A task that represents the asynchronous operation.
     /// The task result contains the category.
     /// </returns>
+    /// <exception cref="NotFoundException">Thrown if the category doesn't exist in the database.</exception>
     public async Task<CategoryDto?> GetCategoryByIdAsync(Guid categoryId, bool trackChanges)
     {
         var category = await _repository.CategoryRepository.GetCategoryByIdAsync(categoryId, trackChanges);
         
         if (category is null) 
-            throw new CategoryNotFoundException(categoryId);
+            throw new NotFoundException($"The category with id: {categoryId} doesn't exist in the database.");
 
         var categoryDto = _mapper.Map<CategoryDto>(category);
         return categoryDto;
